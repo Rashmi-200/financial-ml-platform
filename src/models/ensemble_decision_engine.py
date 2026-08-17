@@ -175,8 +175,31 @@ class QuantDecisionEngine:
         rsi_val: float,
         volatility: float,
     ) -> dict[str, Any]:
-        """Execute ensemble inference and risk decision evaluation for a single asset."""
-        forecasted_return = self.predict_ensemble(X_2d, X_seq)
+        """Execute ensemble inference and risk decision evaluation for a single asset.
+
+        Returns the ensemble decision *plus* a model_breakdown dict with
+        actual individual model predictions and measured inference latency.
+        """
+        import time as _time
+
+        t0 = _time.perf_counter()
+
+        # --- Individual model predictions ---
+        pred_lgb = 0.0
+        if self.lgb_model is not None:
+            pred_lgb = float(self.lgb_model.predict(X_2d)[0])
+
+        pred_torch = 0.0
+        if self.pytorch_model is not None:
+            tensor_seq = torch.tensor(X_seq, dtype=torch.float32).to(DEVICE)
+            with torch.no_grad():
+                pred_torch = float(self.pytorch_model(tensor_seq).cpu().item())
+
+        inference_ms = round((_time.perf_counter() - t0) * 1000.0, 2)
+
+        # Weighted ensemble (equal weights)
+        forecasted_return = 0.5 * pred_lgb + 0.5 * pred_torch
+
         eval_result = self.evaluate_trade_signal(
             forecasted_return=forecasted_return,
             var_95=var_95,
@@ -187,6 +210,13 @@ class QuantDecisionEngine:
         return {
             "ticker": ticker,
             "decision": eval_result,
+            "model_breakdown": {
+                "pytorch_transformer_pred_pct": round(pred_torch * 100.0, 4),
+                "lightgbm_pred_pct": round(pred_lgb * 100.0, 4),
+                "transformer_weight": 0.50,
+                "lightgbm_weight": 0.50,
+                "inference_latency_ms": inference_ms,
+            },
         }
 
 

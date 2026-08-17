@@ -222,3 +222,13 @@ __marimo__/
 data/bronze/*.parquet
 data/silver/*.parquet
 data/gold/*.parquet
+
+# --- Added rules to fix Frontend & Subfolder tracking issues ---
+node_modules/
+**/node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.next/
+mlflow.db
+*.db
