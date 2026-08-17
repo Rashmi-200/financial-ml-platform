@@ -1,0 +1,35 @@
+{
+  "LightGBM": {
+    "params": {
+      "num_leaves": 44,
+      "max_depth": 4,
+      "learning_rate": 0.010115062209838438,
+      "feature_fraction": 0.6587293614572385
+    },
+    "test_rmse": 0.019493618931755094,
+    "test_acc_pct": 50.245098039215684,
+    "artifact": "best_lightgbm.pkl"
+  },
+  "PyTorch GRU": {
+    "params": {
+      "learning_rate": 0.00016434865318545115,
+      "num_layers": 3,
+      "hidden_dim": 64,
+      "dropout": 0.11760685731118511
+    },
+    "test_rmse": 0.031780861251338076,
+    "test_acc_pct": 47.229551451187334,
+    "artifact": "best_pytorch_gru.pt"
+  },
+  "PyTorch Transformer": {
+    "params": {
+      "learning_rate": 0.0030899093035132727,
+      "num_layers": 2,
+      "d_model": 32,
+      "dropout": 0.1401994119613263
+    },
+    "test_rmse": 0.022794919691990566,
+    "test_acc_pct": 53.29815303430079,
+    "artifact": "best_pytorch_transformer.pt"
+  }
+}

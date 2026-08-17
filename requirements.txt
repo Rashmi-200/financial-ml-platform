@@ -1,0 +1,23 @@
+yfinance
+pandas
+polars
+pyarrow
+duckdb
+ta  # technical analysis indicators (pandas-ta is unmaintained/unavailable)
+pyyaml
+PyWavelets
+scipy
+apscheduler
+scikit-learn
+xgboost
+lightgbm
+torch
+optuna
+mlflow
+fastapi
+uvicorn
+
+
+
+
+
