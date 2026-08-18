@@ -40,9 +40,11 @@ export const api = {
   getStockAnalysis: (symbol: string) => fetchJSON<StockAnalysisResponse>(`/api/v1/stocks/${symbol}/analysis`),
   getStockHistory: (symbol: string, limit = 180) => fetchJSON<StockHistoryResponse>(`/api/v1/stocks/${symbol}/history?limit=${limit}`),
   getMarketOverview: () => fetchJSON<MarketOverviewResponse>('/api/v1/market/overview'),
-  getRiskAnalysis: () => fetchJSON<RiskAnalysisResponse>('/api/v1/risk/portfolio'),
+  getRiskAnalysis: (lookback_days = 120, confidence_level = 0.95) =>
+    fetchJSON<RiskAnalysisResponse>(`/api/v1/risk/portfolio?lookback_days=${lookback_days}&confidence_level=${confidence_level}`),
   getNews: () => fetchJSON<NewsItem[]>('/api/v1/news'),
-  getModelMonitor: () => fetchJSON<ModelMonitorResponse>('/api/v1/model/monitor'),
+  getModelMonitor: (psi_threshold = 0.10) =>
+    fetchJSON<ModelMonitorResponse>(`/api/v1/model/monitor?psi_threshold=${psi_threshold}`),
   runBacktest: (payload: BacktestRequest) =>
     fetchJSON<BacktestResponse>('/api/v1/backtest', {
       method: 'POST',

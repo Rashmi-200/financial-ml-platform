@@ -125,24 +125,20 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
   return (
     <div className="space-y-6 pb-12">
       {/* Top Bar with Symbol Selector & Header */}
-      <div className="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-panel p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-extrabold text-white font-mono">{selectedSymbol}</h2>
-            <span className="text-sm text-slate-300 font-sans">{history?.sector || 'Information Technology'}</span>
+            <h2 className="text-2xl font-extrabold font-mono" style={{ color: 'var(--text-primary)' }}>{selectedSymbol}</h2>
+            <span className="text-sm font-sans" style={{ color: 'var(--text-secondary)' }}>{history?.sector || 'Information Technology'}</span>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold font-mono ${
-              analysis?.signal === 'BUY'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                : analysis?.signal === 'SELL'
-                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+              analysis?.signal === 'BUY' ? 'badge-buy' : analysis?.signal === 'SELL' ? 'badge-sell' : 'badge-hold'
             }`}>
               {analysis?.signal || 'HOLD'} (Confidence: {((analysis?.confidence_score || 0.8) * 100).toFixed(0)}%)
             </span>
           </div>
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-400 mt-1">
-            <span>Price: <strong className="text-white text-sm">${analysis?.current_price || history?.summary_stats?.current_price || '--'}</strong></span>
-            <span>Forecast (5d): <strong className="text-cyan-400 text-sm">${analysis?.forecasted_price || '--'} ({analysis?.forecasted_return_pct && analysis.forecasted_return_pct > 0 ? `+${analysis.forecasted_return_pct}%` : `${analysis?.forecasted_return_pct}%`})</strong></span>
+          <div className="flex items-center gap-4 text-xs font-mono mt-1" style={{ color: 'var(--text-muted)' }}>
+            <span>Price: <strong className="text-sm" style={{ color: 'var(--text-primary)' }}>${analysis?.current_price || history?.summary_stats?.current_price || '--'}</strong></span>
+            <span>Forecast (5d): <strong className="text-sm" style={{ color: 'var(--accent)' }}>${analysis?.forecasted_price || '--'} ({analysis?.forecasted_return_pct && analysis.forecasted_return_pct > 0 ? `+${analysis.forecasted_return_pct}%` : `${analysis?.forecasted_return_pct}%`})</strong></span>
           </div>
         </div>
 
@@ -152,11 +148,12 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
             <button
               key={w.symbol}
               onClick={() => setSelectedSymbol(w.symbol)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer"
+              style={
                 selectedSymbol === w.symbol
-                  ? 'bg-cyan-500 text-dark-950 shadow-md shadow-cyan-500/30'
-                  : 'bg-dark-850 hover:bg-dark-800 text-slate-300 border border-slate-700'
-              }`}
+                  ? { background: 'var(--accent)', color: '#fff' }
+                  : { background: 'var(--bg-muted)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }
+              }
             >
               {w.symbol}
             </button>
@@ -165,7 +162,7 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
       </div>
 
       {/* 6 Sub-section Navigation Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-800">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b" style={{ borderColor: 'var(--border)' }}>
         {subSections.map((sec) => {
           const Icon = sec.icon;
           const isActive = activeSubSection === sec.id;
@@ -173,11 +170,12 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
             <button
               key={sec.id}
               onClick={() => setActiveSubSection(sec.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold font-mono tracking-tight transition-all cursor-pointer whitespace-nowrap ${
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold font-mono tracking-tight transition-all cursor-pointer whitespace-nowrap"
+              style={
                 isActive
-                  ? 'bg-gradient-to-r from-cyan-950 to-dark-850 text-cyan-400 border border-cyan-500/40 shadow-md shadow-cyan-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-850/50 border border-transparent'
-              }`}
+                  ? { background: 'rgba(34,211,238,0.12)', color: 'var(--accent)', border: '1px solid rgba(34,211,238,0.3)', fontWeight: 'bold' }
+                  : { color: 'var(--text-muted)', border: '1px solid transparent' }
+              }
             >
               <Icon className="w-3.5 h-3.5" />
               <span>{sec.label}</span>
@@ -191,55 +189,58 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
         <div className="space-y-6">
           {/* Key Metric Stats Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 font-mono">
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">Current Price</div>
-              <div className="text-xl font-bold text-white mt-1">${analysis?.current_price || '--'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Current Price</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${analysis?.current_price || '--'}</div>
             </div>
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">AI Target (5d)</div>
-              <div className="text-xl font-bold text-cyan-400 mt-1">${analysis?.forecasted_price || '--'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>AI Target (5d)</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--accent)' }}>${analysis?.forecasted_price || '--'}</div>
             </div>
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">52-Week High</div>
-              <div className="text-xl font-bold text-slate-200 mt-1">${history?.summary_stats?.high_52w || '--'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>52-Week High</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${history?.summary_stats?.high_52w || '--'}</div>
             </div>
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">52-Week Low</div>
-              <div className="text-xl font-bold text-slate-200 mt-1">${history?.summary_stats?.low_52w || '--'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>52-Week Low</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${history?.summary_stats?.low_52w || '--'}</div>
             </div>
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">P/E Ratio</div>
-              <div className="text-xl font-bold text-indigo-400 mt-1">{history?.summary_stats?.pe_ratio || '29.4'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>P/E Ratio</div>
+              <div className="text-xl font-bold text-indigo-500 font-bold mt-1">{history?.summary_stats?.pe_ratio || '29.4'}</div>
             </div>
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400">Market Beta</div>
-              <div className="text-xl font-bold text-emerald-400 mt-1">{history?.summary_stats?.beta || '1.15'}</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Market Beta</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--up)' }}>{history?.summary_stats?.beta || '1.15'}</div>
             </div>
           </div>
 
           {/* AI Decision Reasoning Card */}
-          <div className="glass-panel-cyan p-6 rounded-2xl border border-cyan-500/30 space-y-3">
+          <div className="glass-panel p-6 rounded-2xl space-y-3">
             <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-cyan-400" />
-              <h3 className="text-base font-bold text-white">Quant Decision Engine Explanation</h3>
+              <Bot className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+              <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Quant Decision Engine Explanation</h3>
             </div>
-            <p className="text-sm text-slate-200 leading-relaxed font-mono">
+            <p className="text-sm leading-relaxed font-mono" style={{ color: 'var(--text-secondary)' }}>
               {analysis?.explanation || 'AI Ensemble forecast indicates positive momentum driven by multi-head attention weights on volume-adjusted RSI and Bollinger compression.'}
             </p>
           </div>
 
           {/* Quick Price Preview Chart */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+          <div className="glass-panel p-6 rounded-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white">Price Action & 20/50 Day SMAs</h3>
+              <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Price Action & 20/50 Day SMAs</h3>
               <div className="flex items-center gap-2">
                 {[60, 180, 365].map((d) => (
                   <button
                     key={d}
                     onClick={() => setTimeframe(d)}
-                    className={`px-2.5 py-1 rounded text-xs font-mono ${
-                      timeframe === d ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-dark-800 text-slate-400'
-                    }`}
+                    className="px-2.5 py-1 rounded text-xs font-mono"
+                    style={
+                      timeframe === d
+                        ? { background: 'rgba(34,211,238,0.2)', color: 'var(--accent)', border: '1px solid rgba(34,211,238,0.3)' }
+                        : { background: 'var(--bg-muted)', color: 'var(--text-muted)' }
+                    }
                   >
                     {d === 60 ? '3M' : d === 180 ? '6M' : '1Y'}
                   </button>
@@ -251,15 +252,15 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
                 <AreaChart data={history?.history || []}>
                   <defs>
                     <linearGradient id="priceGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00f2fe" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#00f2fe" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
-                  <Area type="monotone" dataKey="close" stroke="#00f2fe" strokeWidth={2} fillOpacity={1} fill="url(#priceGrad)" name="Close Price" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                  <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
+                  <Area type="monotone" dataKey="close" stroke="var(--accent)" strokeWidth={2} fillOpacity={1} fill="url(#priceGrad)" name="Close Price" />
                   <Line type="monotone" dataKey="sma_20" stroke="#f59e0b" strokeWidth={1.5} dot={false} name="SMA 20" />
                   <Line type="monotone" dataKey="sma_50" stroke="#8b5cf6" strokeWidth={1.5} dot={false} name="SMA 50" />
                 </AreaChart>
@@ -271,13 +272,13 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
 
       {/* SUB-SECTION 2: PRICE CHART */}
       {activeSubSection === 'chart' && (
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div className="glass-panel p-6 rounded-2xl space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-white">Full Historical Price & Bollinger Bands</h3>
+            <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Full Historical Price & Bollinger Bands</h3>
             <div className="flex items-center gap-4 text-xs font-mono">
-              <span className="flex items-center gap-1 text-cyan-400"><span className="w-2 h-2 rounded-full bg-cyan-400"></span> Close</span>
-              <span className="flex items-center gap-1 text-purple-400"><span className="w-2 h-2 rounded-full bg-purple-400"></span> Upper BB</span>
-              <span className="flex items-center gap-1 text-amber-400"><span className="w-2 h-2 rounded-full bg-amber-400"></span> Lower BB</span>
+              <span className="flex items-center gap-1" style={{ color: 'var(--accent)' }}><span className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }}></span> Close</span>
+              <span className="flex items-center gap-1 text-purple-500"><span className="w-2 h-2 rounded-full bg-purple-500"></span> Upper BB</span>
+              <span className="flex items-center gap-1 text-amber-500"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Lower BB</span>
             </div>
           </div>
 
@@ -290,26 +291,26 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
                     <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="date" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
                 <Area type="monotone" dataKey="bb_upper" stroke="#8b5cf6" strokeWidth={1} strokeDasharray="3 3" fillOpacity={1} fill="url(#bbArea)" name="Upper Bollinger" />
-                <Line type="monotone" dataKey="close" stroke="#00f2fe" strokeWidth={2.5} dot={false} name="Close Price" />
+                <Line type="monotone" dataKey="close" stroke="var(--accent)" strokeWidth={2.5} dot={false} name="Close Price" />
                 <Area type="monotone" dataKey="bb_lower" stroke="#f59e0b" strokeWidth={1} strokeDasharray="3 3" fillOpacity={0} name="Lower Bollinger" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
           {/* Volume Bar Subchart */}
-          <div className="h-32 w-full pt-4 border-t border-slate-800">
-            <div className="text-xs text-slate-400 font-mono mb-1">Trading Volume</div>
+          <div className="h-32 w-full pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+            <div className="text-xs font-mono mb-1" style={{ color: 'var(--text-muted)' }}>Trading Volume</div>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={history?.history || []}>
                 <XAxis dataKey="date" hide />
                 <YAxis hide />
-                <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
-                <Bar dataKey="volume" fill="#334155" radius={[2, 2, 0, 0]} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
+                <Bar dataKey="volume" fill="#64748b" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -320,44 +321,44 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
       {activeSubSection === 'technicals' && (
         <div className="space-y-6">
           {/* RSI Chart */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
+          <div className="glass-panel p-6 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-white">Relative Strength Index (RSI 14)</h3>
-                <p className="text-xs text-slate-400">Overbought &gt; 70 | Oversold &lt; 30</p>
+                <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Relative Strength Index (RSI 14)</h3>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Overbought &gt; 70 | Oversold &lt; 30</p>
               </div>
-              <span className="text-lg font-bold font-mono text-cyan-400">
+              <span className="text-lg font-bold font-mono" style={{ color: 'var(--accent)' }}>
                 {history?.history?.[history.history.length - 1]?.rsi_14?.toFixed(1) || '52.4'}
               </span>
             </div>
             <div className="h-44 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={history?.history || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <YAxis domain={[0, 100]} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
-                  <Line type="monotone" dataKey="rsi_14" stroke="#00f2fe" strokeWidth={2} dot={false} name="RSI (14)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                  <YAxis domain={[0, 100]} stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
+                  <Line type="monotone" dataKey="rsi_14" stroke="var(--accent)" strokeWidth={2} dot={false} name="RSI (14)" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           {/* MACD Chart */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
+          <div className="glass-panel p-6 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-white">MACD & Signal Line (12, 26, 9)</h3>
-                <p className="text-xs text-slate-400">Moving Average Convergence Divergence Momentum</p>
+                <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>MACD & Signal Line (12, 26, 9)</h3>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Moving Average Convergence Divergence Momentum</p>
               </div>
             </div>
             <div className="h-44 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={history?.history || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-                  <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                  <YAxis stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
                   <Line type="monotone" dataKey="macd" stroke="#10b981" strokeWidth={1.8} dot={false} name="MACD" />
                   <Line type="monotone" dataKey="macd_signal" stroke="#f43f5e" strokeWidth={1.8} dot={false} name="Signal" />
                 </LineChart>
@@ -371,34 +372,34 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
       {activeSubSection === 'forecast' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="glass-panel-cyan p-5 rounded-xl border border-cyan-500/30">
-              <div className="text-xs text-slate-400 font-mono">Ensemble Expected Return</div>
-              <div className="text-3xl font-extrabold text-cyan-400 font-mono mt-1">
+            <div className="glass-panel p-5 rounded-xl">
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>Ensemble Expected Return</div>
+              <div className="text-3xl font-extrabold font-mono mt-1" style={{ color: 'var(--accent)' }}>
                 {analysis?.forecasted_return_pct && analysis.forecasted_return_pct > 0 ? `+${analysis.forecasted_return_pct}%` : `${analysis?.forecasted_return_pct}%`}
               </div>
-              <div className="text-xs text-slate-300 mt-2 font-mono">5-Day Holding Horizon</div>
+              <div className="text-xs mt-2 font-mono" style={{ color: 'var(--text-secondary)' }}>5-Day Holding Horizon</div>
             </div>
 
-            <div className="glass-panel-purple p-5 rounded-xl border border-purple-500/30">
-              <div className="text-xs text-slate-400 font-mono">PyTorch Transformer Prediction</div>
-              <div className="text-3xl font-extrabold text-purple-400 font-mono mt-1">
+            <div className="glass-panel p-5 rounded-xl">
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>PyTorch Transformer Prediction</div>
+              <div className="text-3xl font-extrabold text-purple-500 font-mono mt-1">
                 +{analysis?.model_breakdown?.pytorch_transformer_pred_pct || '2.00'}%
               </div>
-              <div className="text-xs text-slate-300 mt-2 font-mono">Weight: 50.0%</div>
+              <div className="text-xs mt-2 font-mono" style={{ color: 'var(--text-secondary)' }}>Weight: 50.0%</div>
             </div>
 
-            <div className="glass-panel-emerald p-5 rounded-xl border border-emerald-500/30">
-              <div className="text-xs text-slate-400 font-mono">LightGBM Regressor Prediction</div>
-              <div className="text-3xl font-extrabold text-emerald-400 font-mono mt-1">
+            <div className="glass-panel p-5 rounded-xl">
+              <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>LightGBM Regressor Prediction</div>
+              <div className="text-3xl font-extrabold font-mono mt-1" style={{ color: 'var(--up)' }}>
                 +{analysis?.model_breakdown?.lightgbm_pred_pct || '1.70'}%
               </div>
-              <div className="text-xs text-slate-300 mt-2 font-mono">Weight: 50.0%</div>
+              <div className="text-xs mt-2 font-mono" style={{ color: 'var(--text-secondary)' }}>Weight: 50.0%</div>
             </div>
           </div>
 
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
-            <h3 className="text-base font-bold text-white">5-Day Projected Trajectory Cone</h3>
-            <p className="text-xs text-slate-400 font-mono">
+          <div className="glass-panel p-6 rounded-2xl space-y-4">
+            <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>5-Day Projected Trajectory Cone</h3>
+            <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
               Simulated monte-carlo confidence bounds (90% interval) around ensemble prediction.
             </p>
             <div className="h-64 w-full">
@@ -413,12 +414,12 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
                     { day: 'Day 5 (Target)', price: analysis?.forecasted_price || 224.2, upper: (analysis?.forecasted_price || 224.2) * 1.018, lower: (analysis?.forecasted_price || 224.2) * 0.985 },
                   ]}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="day" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '12px' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="day" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                  <YAxis domain={['auto', 'auto']} stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '12px' }} />
                   <Line type="monotone" dataKey="upper" stroke="#8b5cf6" strokeDasharray="3 3" dot={false} name="Upper 90% Bound" />
-                  <Line type="monotone" dataKey="price" stroke="#00f2fe" strokeWidth={2.5} dot={{ r: 4 }} name="Expected Path" />
+                  <Line type="monotone" dataKey="price" stroke="var(--accent)" strokeWidth={2.5} dot={{ r: 4 }} name="Expected Path" />
                   <Line type="monotone" dataKey="lower" stroke="#f59e0b" strokeDasharray="3 3" dot={false} name="Lower 90% Bound" />
                 </LineChart>
               </ResponsiveContainer>
@@ -431,50 +432,50 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
       {activeSubSection === 'risk' && (
         <div className="space-y-6 font-mono">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-400">95% Daily VaR</div>
-              <div className="text-2xl font-bold text-rose-400 mt-1">
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-xs" style={{ color: 'var(--text-muted)' }}>95% Daily VaR</div>
+              <div className="text-2xl font-bold mt-1" style={{ color: 'var(--down)' }}>
                 {analysis?.risk_metrics?.var_95_pct?.toFixed(2) || '2.15'}%
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">Parametric Normal</div>
+              <div className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>Parametric Normal</div>
             </div>
 
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-400">30-Day Realized Volatility</div>
-              <div className="text-2xl font-bold text-amber-400 mt-1">
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-xs" style={{ color: 'var(--text-muted)' }}>30-Day Realized Volatility</div>
+              <div className="text-2xl font-bold text-amber-500 mt-1">
                 {((analysis?.risk_metrics?.volatility_30d || 0.018) * 100).toFixed(2)}%
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">Daily StDev</div>
+              <div className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>Daily StDev</div>
             </div>
 
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-400">RSI 14 Level</div>
-              <div className="text-2xl font-bold text-cyan-400 mt-1">
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-xs" style={{ color: 'var(--text-muted)' }}>RSI 14 Level</div>
+              <div className="text-2xl font-bold mt-1" style={{ color: 'var(--accent)' }}>
                 {analysis?.risk_metrics?.rsi_14?.toFixed(1) || '52.4'}
               </div>
-              <div className="text-[10px] text-emerald-400 mt-1">Healthy Neutral Range</div>
+              <div className="text-[10px] mt-1" style={{ color: 'var(--up)' }}>Healthy Neutral Range</div>
             </div>
 
-            <div className="glass-panel p-4 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-400">Risk Filter Status</div>
-              <div className="text-2xl font-bold text-emerald-400 mt-1">PASSED</div>
-              <div className="text-[10px] text-slate-400 mt-1">VaR &lt; 3.5% Threshold</div>
+            <div className="glass-panel p-4 rounded-xl">
+              <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Risk Filter Status</div>
+              <div className="text-2xl font-bold mt-1" style={{ color: 'var(--up)' }}>PASSED</div>
+              <div className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>VaR &lt; 3.5% Threshold</div>
             </div>
           </div>
 
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
-            <h3 className="text-base font-bold text-white">Automated Risk Enforcement Rules</h3>
-            <ul className="space-y-2 text-xs text-slate-300">
+          <div className="glass-panel p-6 rounded-2xl space-y-3">
+            <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Automated Risk Enforcement Rules</h3>
+            <ul className="space-y-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <CheckCircle className="w-4 h-4" style={{ color: 'var(--up)' }} />
                 <span>Tail-Risk Cap: Trades blocked automatically if 1-day 95% VaR exceeds 3.50%.</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <CheckCircle className="w-4 h-4" style={{ color: 'var(--up)' }} />
                 <span>Overbought Guard: BUY signals muted if RSI &gt; 70; triggers SELL if RSI &gt; 75.</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <CheckCircle className="w-4 h-4" style={{ color: 'var(--up)' }} />
                 <span>Minimum Hurdle Rate: BUY signals require forecasted return &gt; +1.50% net of transaction costs.</span>
               </li>
             </ul>
@@ -484,34 +485,34 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
 
       {/* SUB-SECTION 6: MODEL DETAILS */}
       {activeSubSection === 'model' && (
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6 font-mono">
+        <div className="glass-panel p-6 rounded-2xl space-y-6 font-mono">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-white">Production Model Architecture & Feature Weights</h3>
-            <span className="text-xs text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded border border-emerald-500/30">
+            <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Production Model Architecture & Feature Weights</h3>
+            <span className="text-xs font-bold badge-buy">
               Active in Memory
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div className="p-4 rounded-xl bg-dark-950/60 border border-slate-800 space-y-3">
-              <div className="font-bold text-cyan-400 text-base">PyTorch Transformer (Deep Temporal)</div>
-              <div className="space-y-1 text-xs text-slate-300">
-                <div>Layers: <span className="text-white">2 TransformerEncoderLayers</span></div>
-                <div>d_model: <span className="text-white">32 dimensions</span></div>
-                <div>Multi-Head Attention: <span className="text-white">2 Heads</span></div>
-                <div>Sequence Window: <span className="text-white">30 trading days (T-29 to T-0)</span></div>
-                <div>Parameters: <span className="text-white">186,107 trainable weights</span></div>
+            <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+              <div className="font-bold text-base" style={{ color: 'var(--accent)' }}>PyTorch Transformer (Deep Temporal)</div>
+              <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                <div>Layers: <span style={{ color: 'var(--text-primary)' }}>2 TransformerEncoderLayers</span></div>
+                <div>d_model: <span style={{ color: 'var(--text-primary)' }}>32 dimensions</span></div>
+                <div>Multi-Head Attention: <span style={{ color: 'var(--text-primary)' }}>2 Heads</span></div>
+                <div>Sequence Window: <span style={{ color: 'var(--text-primary)' }}>30 trading days (T-29 to T-0)</span></div>
+                <div>Parameters: <span style={{ color: 'var(--text-primary)' }}>186,107 trainable weights</span></div>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-dark-950/60 border border-slate-800 space-y-3">
-              <div className="font-bold text-emerald-400 text-base">LightGBM Regressor (Tabular Non-linear)</div>
-              <div className="space-y-1 text-xs text-slate-300">
-                <div>Max Depth: <span className="text-white">4 levels</span></div>
-                <div>Num Leaves: <span className="text-white">44 leaves</span></div>
-                <div>Learning Rate: <span className="text-white">0.0101</span></div>
-                <div>Feature Fraction: <span className="text-white">0.658 (Subsampling)</span></div>
-                <div>Engineered Inputs: <span className="text-white">27 Technical + Wavelet + FFT features</span></div>
+            <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+              <div className="font-bold text-base" style={{ color: 'var(--up)' }}>LightGBM Regressor (Tabular Non-linear)</div>
+              <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                <div>Max Depth: <span style={{ color: 'var(--text-primary)' }}>4 levels</span></div>
+                <div>Num Leaves: <span style={{ color: 'var(--text-primary)' }}>44 leaves</span></div>
+                <div>Learning Rate: <span style={{ color: 'var(--text-primary)' }}>0.0101</span></div>
+                <div>Feature Fraction: <span style={{ color: 'var(--text-primary)' }}>0.658 (Subsampling)</span></div>
+                <div>Engineered Inputs: <span style={{ color: 'var(--text-primary)' }}>27 Technical + Wavelet + FFT features</span></div>
               </div>
             </div>
           </div>
