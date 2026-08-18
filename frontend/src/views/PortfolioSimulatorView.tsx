@@ -95,59 +95,61 @@ export const PortfolioSimulatorView: React.FC = () => {
       {/* Header section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-            <Briefcase className="w-6 h-6 text-cyan-400" />
+          <h2 className="text-2xl font-extrabold tracking-tight flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <Briefcase className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             Portfolio Simulator & Quantitative Backtesting Engine
           </h2>
-          <p className="text-sm text-slate-400 mt-0.5">
+          <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
             Simulate ML-driven allocation strategies on historical Gold dataset with granular risk and return attribution.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-lg bg-dark-850 border border-slate-800 text-xs font-mono text-cyan-300">
-            Engine Mode: <strong className="text-emerald-400">Deterministic Backtester</strong>
+          <span className="px-3 py-1 rounded-lg text-xs font-mono" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
+            Engine Mode: <strong style={{ color: 'var(--up)' }}>Deterministic Backtester</strong>
           </span>
         </div>
       </div>
 
       {/* Form Inputs Container */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
-        <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
-          <Zap className="w-4 h-4 text-cyan-400" />
+      <div className="glass-panel p-6 rounded-2xl space-y-6">
+        <h3 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+          <Zap className="w-4 h-4" style={{ color: 'var(--accent)' }} />
           Simulation Configuration Parameters
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 font-mono text-xs">
           {/* Initial Capital */}
           <div className="space-y-2">
-            <label className="text-slate-300 font-semibold block">Initial Capital ($ USD)</label>
+            <label className="font-semibold block" style={{ color: 'var(--text-secondary)' }}>Initial Capital ($ USD)</label>
             <div className="relative">
-              <span className="absolute left-3 top-2.5 text-slate-500 font-bold">$</span>
+              <span className="absolute left-3 top-2.5 font-bold" style={{ color: 'var(--text-muted)' }}>$</span>
               <input
                 type="number"
                 value={initialCapital}
                 onChange={(e) => setInitialCapital(Number(e.target.value))}
                 min={1000}
                 step={5000}
-                className="w-full pl-8 pr-3 py-2 rounded-xl bg-dark-950 border border-slate-700 text-white font-bold focus:border-cyan-400 focus:outline-none"
+                className="w-full pl-8 pr-3 py-2 rounded-xl border font-bold focus:outline-none"
+                style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
               />
             </div>
           </div>
 
           {/* Risk Tolerance */}
           <div className="space-y-2">
-            <label className="text-slate-300 font-semibold block">Risk Tolerance Tier</label>
+            <label className="font-semibold block" style={{ color: 'var(--text-secondary)' }}>Risk Tolerance Tier</label>
             <div className="grid grid-cols-3 gap-1.5">
               {(['LOW', 'MEDIUM', 'HIGH'] as const).map((r) => (
                 <button
                   key={r}
                   type="button"
                   onClick={() => setRiskTolerance(r)}
-                  className={`py-2 rounded-lg font-bold transition-all cursor-pointer ${
+                  className="py-2 rounded-lg font-bold transition-all cursor-pointer"
+                  style={
                     riskTolerance === r
-                      ? 'bg-cyan-500 text-dark-950 shadow-md shadow-cyan-500/20'
-                      : 'bg-dark-950 text-slate-400 border border-slate-800 hover:border-slate-700'
-                  }`}
+                      ? { background: 'var(--accent)', color: '#fff' }
+                      : { background: 'var(--bg-muted)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }
+                  }
                 >
                   {r}
                 </button>
@@ -157,34 +159,37 @@ export const PortfolioSimulatorView: React.FC = () => {
 
           {/* Date Range Start */}
           <div className="space-y-2">
-            <label className="text-slate-300 font-semibold block">Start Date</label>
+            <label className="font-semibold block" style={{ color: 'var(--text-secondary)' }}>Start Date</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl border focus:outline-none"
+              style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             />
           </div>
 
           {/* Date Range End */}
           <div className="space-y-2">
-            <label className="text-slate-300 font-semibold block">End Date</label>
+            <label className="font-semibold block" style={{ color: 'var(--text-secondary)' }}>End Date</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none"
+              className="w-full px-3 py-2 rounded-xl border focus:outline-none"
+              style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
             />
           </div>
         </div>
 
         {/* Strategy Selection Dropdown */}
         <div className="space-y-2 font-mono text-xs">
-          <label className="text-slate-300 font-semibold block">Quantitative Trading Strategy</label>
+          <label className="font-semibold block" style={{ color: 'var(--text-secondary)' }}>Quantitative Trading Strategy</label>
           <select
             value={strategy}
             onChange={(e) => setStrategy(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-dark-950 border border-slate-700 text-white font-medium focus:border-cyan-400 focus:outline-none text-sm"
+            className="w-full px-4 py-2.5 rounded-xl border font-medium focus:outline-none text-sm"
+            style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}
           >
             {STRATEGIES.map((s) => (
               <option key={s.id} value={s.id}>
@@ -197,8 +202,8 @@ export const PortfolioSimulatorView: React.FC = () => {
         {/* Ticker Multi-Selection Pills */}
         <div className="space-y-2 font-mono text-xs">
           <div className="flex items-center justify-between">
-            <label className="text-slate-300 font-semibold">Universe Asset Selection ({selectedTickers.length} selected)</label>
-            <span className="text-[11px] text-slate-400">Click to toggle included tickers</span>
+            <label className="font-semibold" style={{ color: 'var(--text-secondary)' }}>Universe Asset Selection ({selectedTickers.length} selected)</label>
+            <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Click to toggle included tickers</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {AVAILABLE_TICKERS.map((sym) => {
@@ -208,13 +213,14 @@ export const PortfolioSimulatorView: React.FC = () => {
                   key={sym}
                   type="button"
                   onClick={() => toggleTicker(sym)}
-                  className={`px-3.5 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className="px-3.5 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                  style={
                     isSelected
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-sm'
-                      : 'bg-dark-950 text-slate-500 border border-slate-800 hover:border-slate-700'
-                  }`}
+                      ? { background: 'rgba(34,211,238,0.15)', color: 'var(--accent)', border: '1px solid rgba(34,211,238,0.4)' }
+                      : { background: 'var(--bg-muted)', color: 'var(--text-muted)', border: '1px solid var(--border)' }
+                  }
                 >
-                  {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                  {isSelected && <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />}
                   <span>{sym}</span>
                 </button>
               );
@@ -227,7 +233,8 @@ export const PortfolioSimulatorView: React.FC = () => {
           <button
             onClick={handleRunSimulation}
             disabled={loading}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
+            className="px-6 py-3 rounded-xl font-bold text-sm shadow-lg flex items-center gap-2 cursor-pointer disabled:opacity-50 transition-all text-white"
+            style={{ background: 'var(--accent)' }}
           >
             <Play className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             {loading ? 'Running Quant Simulation...' : 'Execute Backtest Simulation'}
@@ -235,7 +242,7 @@ export const PortfolioSimulatorView: React.FC = () => {
         </div>
 
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono">
+          <div className="p-3 rounded-xl text-xs font-mono" style={{ background: 'rgba(220,38,38,0.1)', borderColor: 'rgba(220,38,38,0.3)', color: 'var(--down)' }}>
             {errorMsg}
           </div>
         )}
@@ -247,88 +254,88 @@ export const PortfolioSimulatorView: React.FC = () => {
           {/* 8 KPI CARDS */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 font-mono">
             {/* 1. Initial Capital */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Initial Capital</div>
-              <div className="text-base font-bold text-slate-200 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Initial Capital</div>
+              <div className="text-base font-bold mt-1" style={{ color: 'var(--text-primary)' }}>
                 ${backtestResult.initial_capital.toLocaleString()}
               </div>
             </div>
 
             {/* 2. Final Capital */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Final Capital</div>
-              <div className="text-base font-bold text-cyan-400 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Final Capital</div>
+              <div className="text-base font-bold mt-1" style={{ color: 'var(--accent)' }}>
                 ${backtestResult.final_value.toLocaleString()}
               </div>
             </div>
 
             {/* 3. Total Return % */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Total Return</div>
-              <div className={`text-base font-bold mt-1 ${backtestResult.total_return_pct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Total Return</div>
+              <div className="text-base font-bold mt-1" style={{ color: backtestResult.total_return_pct >= 0 ? 'var(--up)' : 'var(--down)' }}>
                 {backtestResult.total_return_pct >= 0 ? `+${backtestResult.total_return_pct}%` : `${backtestResult.total_return_pct}%`}
               </div>
             </div>
 
             {/* 4. Annualized Return % */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Annualized Return</div>
-              <div className="text-base font-bold text-emerald-400 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Annualized Return</div>
+              <div className="text-base font-bold mt-1" style={{ color: 'var(--up)' }}>
                 +{backtestResult.annualized_return_pct}%
               </div>
             </div>
 
             {/* 5. Sharpe Ratio */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Sharpe Ratio</div>
-              <div className="text-base font-bold text-indigo-400 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Sharpe Ratio</div>
+              <div className="text-base font-bold text-indigo-500 font-bold mt-1">
                 {backtestResult.sharpe_ratio.toFixed(2)}
               </div>
             </div>
 
             {/* 6. Sortino Ratio */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Sortino Ratio</div>
-              <div className="text-base font-bold text-purple-400 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Sortino Ratio</div>
+              <div className="text-base font-bold text-purple-500 font-bold mt-1">
                 {backtestResult.sortino_ratio.toFixed(2)}
               </div>
             </div>
 
             {/* 7. Max Drawdown % */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Max Drawdown</div>
-              <div className="text-base font-bold text-rose-400 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Max Drawdown</div>
+              <div className="text-base font-bold mt-1" style={{ color: 'var(--down)' }}>
                 {backtestResult.max_drawdown_pct.toFixed(2)}%
               </div>
             </div>
 
             {/* 8. Win Rate % */}
-            <div className="glass-panel p-3.5 rounded-xl border border-slate-800">
-              <div className="text-[10px] text-slate-400 uppercase">Win Rate</div>
-              <div className="text-base font-bold text-cyan-300 mt-1">
+            <div className="glass-panel p-3.5 rounded-xl">
+              <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Win Rate</div>
+              <div className="text-base font-bold mt-1" style={{ color: 'var(--accent)' }}>
                 {backtestResult.win_rate_pct.toFixed(1)}%
               </div>
             </div>
           </div>
 
           {/* Interactive Equity Curve Chart (Strategy vs Benchmark) */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
+          <div className="glass-panel p-6 rounded-2xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="text-base font-bold text-white tracking-tight">
+                <h3 className="text-base font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
                   Portfolio Equity Curve: Strategy Performance vs Benchmark
                 </h3>
-                <p className="text-xs text-slate-400 font-mono">
-                  Strategy Alpha: <strong className="text-emerald-400">+{backtestResult.alpha_pct}%</strong> | Beta: <strong className="text-slate-200">{backtestResult.beta}</strong>
+                <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+                  Strategy Alpha: <strong style={{ color: 'var(--up)' }}>+{backtestResult.alpha_pct}%</strong> | Beta: <strong style={{ color: 'var(--text-primary)' }}>{backtestResult.beta}</strong>
                 </p>
               </div>
 
               <div className="flex items-center gap-4 text-xs font-mono">
-                <span className="flex items-center gap-1.5 text-cyan-400">
-                  <span className="w-3 h-3 rounded bg-cyan-400"></span> Strategy Equity ($)
+                <span className="flex items-center gap-1.5" style={{ color: 'var(--accent)' }}>
+                  <span className="w-3 h-3 rounded" style={{ background: 'var(--accent)' }}></span> Strategy Equity ($)
                 </span>
-                <span className="flex items-center gap-1.5 text-purple-400">
-                  <span className="w-3 h-3 rounded bg-purple-400"></span> Equal-Weight Benchmark ($)
+                <span className="flex items-center gap-1.5 text-purple-500">
+                  <span className="w-3 h-3 rounded bg-purple-500"></span> Equal-Weight Benchmark ($)
                 </span>
               </div>
             </div>
@@ -338,24 +345,24 @@ export const PortfolioSimulatorView: React.FC = () => {
                 <AreaChart data={backtestResult.equity_curve}>
                   <defs>
                     <linearGradient id="stratGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00f2fe" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#00f2fe" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="var(--accent)" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
                   <YAxis
                     domain={['auto', 'auto']}
                     stroke="#64748b"
-                    tick={{ fill: '#94a3b8', fontSize: 11 }}
+                    tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
                     tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0c1222',
-                      borderColor: '#1e293b',
+                      backgroundColor: 'var(--bg-surface)',
+                      borderColor: 'var(--border)',
                       borderRadius: '0.75rem',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '12px',
                       fontFamily: 'JetBrains Mono',
                     }}
@@ -364,7 +371,7 @@ export const PortfolioSimulatorView: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="portfolio_value"
-                    stroke="#00f2fe"
+                    stroke="var(--accent)"
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#stratGrad)"
@@ -384,14 +391,14 @@ export const PortfolioSimulatorView: React.FC = () => {
             </div>
 
             {/* Underwater Drawdown Subchart */}
-            <div className="h-28 w-full pt-4 border-t border-slate-800">
-              <div className="text-xs text-slate-400 font-mono mb-1">Underwater Drawdown Timeline (%)</div>
+            <div className="h-28 w-full pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+              <div className="text-xs font-mono mb-1" style={{ color: 'var(--text-muted)' }}>Underwater Drawdown Timeline (%)</div>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={backtestResult.equity_curve}>
                   <XAxis dataKey="date" hide />
-                  <YAxis domain={[-30, 0]} stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 9 }} />
+                  <YAxis domain={[-30, 0]} stroke="#64748b" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0c1222', borderColor: '#1e293b', borderRadius: '0.5rem', color: '#fff', fontSize: '11px' }}
+                    contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border)', borderRadius: '0.5rem', color: 'var(--text-primary)', fontSize: '11px' }}
                     formatter={(val: number) => [`${val}%`, 'Drawdown']}
                   />
                   <Area type="monotone" dataKey="drawdown_pct" stroke="#f43f5e" fill="#f43f5e" fillOpacity={0.25} />
@@ -403,54 +410,54 @@ export const PortfolioSimulatorView: React.FC = () => {
           {/* Allocation & Sample Trades */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Allocation weights */}
-            <div className="glass-panel p-5 rounded-xl border border-slate-800 space-y-3 font-mono">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <PieIcon className="w-4 h-4 text-cyan-400" />
+            <div className="glass-panel p-5 rounded-xl space-y-3 font-mono">
+              <h4 className="text-sm font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <PieIcon className="w-4 h-4" style={{ color: 'var(--accent)' }} />
                 Asset Target Allocation
               </h4>
               <div className="space-y-2 text-xs">
                 {Object.entries(backtestResult.allocation).map(([sym, wt]) => (
-                  <div key={sym} className="flex justify-between items-center p-2 rounded bg-dark-950/60 border border-slate-800">
-                    <span className="font-bold text-white">{sym}</span>
-                    <span className="text-cyan-400 font-semibold">{wt}%</span>
+                  <div key={sym} className="flex justify-between items-center p-2 rounded border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <span className="font-bold" style={{ color: 'var(--text-primary)' }}>{sym}</span>
+                    <span className="font-semibold" style={{ color: 'var(--accent)' }}>{wt}%</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Executed Trades Log */}
-            <div className="md:col-span-2 glass-panel p-5 rounded-xl border border-slate-800 space-y-3 font-mono">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <Activity className="w-4 h-4 text-emerald-400" />
+            <div className="md:col-span-2 glass-panel p-5 rounded-xl space-y-3 font-mono">
+              <h4 className="text-sm font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <Activity className="w-4 h-4" style={{ color: 'var(--up)' }} />
                 Executed AI Signal Transactions Log
               </h4>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-dark-950/70 text-slate-400 border-b border-slate-800">
+                <table className="w-full text-left qv-table">
+                  <thead>
                     <tr>
-                      <th className="p-2">Date</th>
-                      <th className="p-2">Ticker</th>
-                      <th className="p-2">Action</th>
-                      <th className="p-2">Price</th>
-                      <th className="p-2">Shares</th>
-                      <th className="p-2">Confidence</th>
+                      <th>Date</th>
+                      <th>Ticker</th>
+                      <th>Action</th>
+                      <th>Price</th>
+                      <th>Shares</th>
+                      <th>Confidence</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-200">
+                  <tbody className="font-mono">
                     {backtestResult.trades.map((t, idx) => (
-                      <tr key={idx} className="hover:bg-dark-850/50">
-                        <td className="p-2 text-slate-400">{t.date}</td>
-                        <td className="p-2 font-bold text-white">{t.symbol}</td>
-                        <td className="p-2">
+                      <tr key={idx}>
+                        <td style={{ color: 'var(--text-muted)' }}>{t.date}</td>
+                        <td className="font-bold" style={{ color: 'var(--text-primary)' }}>{t.symbol}</td>
+                        <td>
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                            t.action === 'BUY' ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30' : 'bg-amber-950 text-amber-400 border border-amber-500/30'
+                            t.action === 'BUY' ? 'badge-buy' : 'badge-hold'
                           }`}>
                             {t.action}
                           </span>
                         </td>
-                        <td className="p-2">${t.price.toFixed(2)}</td>
-                        <td className="p-2">{t.shares}</td>
-                        <td className="p-2 text-cyan-400">{(t.signal_confidence * 100).toFixed(0)}%</td>
+                        <td style={{ color: 'var(--text-primary)' }}>${t.price.toFixed(2)}</td>
+                        <td style={{ color: 'var(--text-primary)' }}>{t.shares}</td>
+                        <td style={{ color: 'var(--accent)' }}>{(t.signal_confidence * 100).toFixed(0)}%</td>
                       </tr>
                     ))}
                   </tbody>

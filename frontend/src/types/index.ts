@@ -153,6 +153,7 @@ export interface NewsItem {
   sentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
   sentiment_score: number;
   impact_level: 'LOW' | 'MEDIUM' | 'HIGH';
+  url?: string;
 }
 
 export interface FeatureDriftItem {
