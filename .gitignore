@@ -232,3 +232,6 @@ frontend/build/
 frontend/.next/
 mlflow.db
 *.db
+
+*.duckdb
+data/*.duckdb
