@@ -113,6 +113,21 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
     };
   }, [selectedSymbol]);
 
+  const currentPrice = analysis?.current_price ?? history?.summary_stats?.current_price;
+  const forecastedPrice = analysis?.forecasted_price;
+  const forecastedReturn = analysis?.forecasted_return_pct;
+
+  const formattedPrice = currentPrice !== undefined && currentPrice !== null ? `$${currentPrice.toFixed(2)}` : '--';
+  const formattedForecastPrice = forecastedPrice !== undefined && forecastedPrice !== null ? `$${forecastedPrice.toFixed(2)}` : '--';
+  const formattedForecastReturn = forecastedReturn !== undefined && forecastedReturn !== null
+    ? (forecastedReturn >= 0 ? `+${forecastedReturn.toFixed(2)}%` : `${forecastedReturn.toFixed(2)}%`)
+    : '--%';
+
+  const high52 = history?.summary_stats?.high_52w !== undefined && history?.summary_stats?.high_52w !== null ? `$${history.summary_stats.high_52w.toFixed(2)}` : '--';
+  const low52 = history?.summary_stats?.low_52w !== undefined && history?.summary_stats?.low_52w !== null ? `$${history.summary_stats.low_52w.toFixed(2)}` : '--';
+  const peRatio = history?.summary_stats?.pe_ratio !== undefined && history?.summary_stats?.pe_ratio !== null ? history.summary_stats.pe_ratio : '--';
+  const betaVal = history?.summary_stats?.beta !== undefined && history?.summary_stats?.beta !== null ? history.summary_stats.beta : '--';
+
   const subSections: { id: SubSection; label: string; icon: any }[] = [
     { id: 'overview', label: '1. Overview', icon: Layers },
     { id: 'chart', label: '2. Price Chart', icon: TrendingUp },
@@ -133,12 +148,12 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold font-mono ${
               analysis?.signal === 'BUY' ? 'badge-buy' : analysis?.signal === 'SELL' ? 'badge-sell' : 'badge-hold'
             }`}>
-              {analysis?.signal || 'HOLD'} (Confidence: {((analysis?.confidence_score || 0.8) * 100).toFixed(0)}%)
+              {analysis?.signal || 'HOLD'} (Confidence: {(((analysis?.confidence_score ?? 0.8)) * 100).toFixed(0)}%)
             </span>
           </div>
           <div className="flex items-center gap-4 text-xs font-mono mt-1" style={{ color: 'var(--text-muted)' }}>
-            <span>Price: <strong className="text-sm" style={{ color: 'var(--text-primary)' }}>${analysis?.current_price || history?.summary_stats?.current_price || '--'}</strong></span>
-            <span>Forecast (5d): <strong className="text-sm" style={{ color: 'var(--accent)' }}>${analysis?.forecasted_price || '--'} ({analysis?.forecasted_return_pct && analysis.forecasted_return_pct > 0 ? `+${analysis.forecasted_return_pct}%` : `${analysis?.forecasted_return_pct}%`})</strong></span>
+            <span>Price: <strong className="text-sm" style={{ color: 'var(--text-primary)' }}>{formattedPrice}</strong></span>
+            <span>Forecast (5d): <strong className="text-sm" style={{ color: 'var(--accent)' }}>{formattedForecastPrice} ({formattedForecastReturn})</strong></span>
           </div>
         </div>
 
@@ -191,27 +206,27 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 font-mono">
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Current Price</div>
-              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${analysis?.current_price || '--'}</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>{formattedPrice}</div>
             </div>
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>AI Target (5d)</div>
-              <div className="text-xl font-bold mt-1" style={{ color: 'var(--accent)' }}>${analysis?.forecasted_price || '--'}</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--accent)' }}>{formattedForecastPrice}</div>
             </div>
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>52-Week High</div>
-              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${history?.summary_stats?.high_52w || '--'}</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>{high52}</div>
             </div>
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>52-Week Low</div>
-              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>${history?.summary_stats?.low_52w || '--'}</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--text-primary)' }}>{low52}</div>
             </div>
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>P/E Ratio</div>
-              <div className="text-xl font-bold text-indigo-500 font-bold mt-1">{history?.summary_stats?.pe_ratio || '29.4'}</div>
+              <div className="text-xl font-bold text-indigo-500 font-bold mt-1">{peRatio}</div>
             </div>
             <div className="glass-panel p-4 rounded-xl">
               <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Market Beta</div>
-              <div className="text-xl font-bold mt-1" style={{ color: 'var(--up)' }}>{history?.summary_stats?.beta || '1.15'}</div>
+              <div className="text-xl font-bold mt-1" style={{ color: 'var(--up)' }}>{betaVal}</div>
             </div>
           </div>
 
@@ -222,7 +237,7 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
               <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Quant Decision Engine Explanation</h3>
             </div>
             <p className="text-sm leading-relaxed font-mono" style={{ color: 'var(--text-secondary)' }}>
-              {analysis?.explanation || 'AI Ensemble forecast indicates positive momentum driven by multi-head attention weights on volume-adjusted RSI and Bollinger compression.'}
+              {analysis?.explanation || 'AI Ensemble forecast indicates position trajectory based on multi-head attention over technical features and risk constraints.'}
             </p>
           </div>
 

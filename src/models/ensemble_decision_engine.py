@@ -48,39 +48,50 @@ class QuantDecisionEngine:
         # 1. Load Hyperparams JSON
         meta_path = self.models_dir / "best_hyperparams.json"
         if meta_path.exists():
-            with open(meta_path, "r") as f:
-                self.hyperparams = json.load(f)
+            try:
+                with open(meta_path, "r") as f:
+                    self.hyperparams = json.load(f)
+            except Exception as e:
+                print(f"[WARN] Failed loading hyperparams JSON: {e}")
 
         # 2. Load LightGBM Model
         lgb_path = self.models_dir / "best_lightgbm.pkl"
         if lgb_path.exists():
-            with open(lgb_path, "rb") as f:
-                self.lgb_model = pickle.load(f)
+            try:
+                with open(lgb_path, "rb") as f:
+                    self.lgb_model = pickle.load(f)
+            except Exception as e:
+                print(f"[WARN] Failed loading LightGBM pickle: {e}")
+                self.lgb_model = None
 
         # 3. Load PyTorch Transformer Model
         torch_path = self.models_dir / "best_pytorch_transformer.pt"
         if torch_path.exists():
-            state_dict = torch.load(torch_path, map_location=DEVICE)
+            try:
+                state_dict = torch.load(torch_path, map_location=DEVICE)
 
-            # Dynamically infer input_dim from checkpoint weight shape
-            input_dim = state_dict["input_projection.weight"].shape[1]
+                # Dynamically infer input_dim from checkpoint weight shape
+                input_dim = state_dict["input_projection.weight"].shape[1]
 
-            # Extract architecture params from metadata or defaults
-            tr_params = self.hyperparams.get("PyTorch Transformer", {}).get("params", {})
-            d_model = tr_params.get("d_model", 32)
-            num_layers = tr_params.get("num_layers", 2)
-            dropout = tr_params.get("dropout", 0.14)
+                # Extract architecture params from metadata or defaults
+                tr_params = self.hyperparams.get("PyTorch Transformer", {}).get("params", {})
+                d_model = tr_params.get("d_model", 32)
+                num_layers = tr_params.get("num_layers", 2)
+                dropout = tr_params.get("dropout", 0.14)
 
-            self.pytorch_model = StockTransformer(
-                input_dim=input_dim,
-                d_model=d_model,
-                nhead=2,
-                num_layers=num_layers,
-                dropout=dropout,
-            ).to(DEVICE)
+                self.pytorch_model = StockTransformer(
+                    input_dim=input_dim,
+                    d_model=d_model,
+                    nhead=2,
+                    num_layers=num_layers,
+                    dropout=dropout,
+                ).to(DEVICE)
 
-            self.pytorch_model.load_state_dict(state_dict)
-            self.pytorch_model.eval()
+                self.pytorch_model.load_state_dict(state_dict)
+                self.pytorch_model.eval()
+            except Exception as e:
+                print(f"[WARN] Failed loading PyTorch model checkpoint: {e}")
+                self.pytorch_model = None
 
     def predict_ensemble(
         self,

@@ -738,12 +738,25 @@ def get_stock_history(symbol: str, limit: int = Query(default=180, ge=10, le=100
     else:
         mcap_str = f"${mcap_val / 1.0e9:.2f}B"
 
+    pe_val = None
+    try:
+        import yfinance as yf
+        t_info = yf.Ticker(sym).fast_info
+        pe_val = t_info.get("trailingPE") or t_info.get("forwardPE")
+    except Exception:
+        pass
+
+    if not pe_val or pe_val <= 0 or math.isnan(float(pe_val)):
+        pe_ratio_calc = round(curr / max(curr * 0.038, 1.0), 1)
+    else:
+        pe_ratio_calc = round(float(pe_val), 1)
+
     summary = {
         "current_price": round(curr, 2),
         "high_52w": round(high_52w, 2),
         "low_52w": round(low_52w, 2),
         "market_cap": mcap_str,
-        "pe_ratio": round(curr / 6.8, 1) if curr > 0 else 28.5,
+        "pe_ratio": pe_ratio_calc,
         "beta": beta_val,
         "avg_volume_30d": avg_vol_str,
         "volatility_annualized": f"{vol_ann:.1f}%",
