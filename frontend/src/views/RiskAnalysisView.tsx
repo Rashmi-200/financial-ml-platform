@@ -34,6 +34,11 @@ export const RiskAnalysisView: React.FC = () => {
     fetchRiskData(lookbackDays, confidenceLevel);
   }, [lookbackDays, confidenceLevel]);
 
+  const var95 = riskData?.portfolio_var_95_pct !== undefined ? `${riskData.portfolio_var_95_pct.toFixed(2)}%` : '--%';
+  const var99 = riskData?.portfolio_var_99_pct !== undefined ? `${riskData.portfolio_var_99_pct.toFixed(2)}%` : '--%';
+  const cvar95 = riskData?.portfolio_cvar_95_pct !== undefined ? `${riskData.portfolio_cvar_95_pct.toFixed(2)}%` : '--%';
+  const divRatio = riskData?.diversification_ratio !== undefined ? `${riskData.diversification_ratio.toFixed(2)}x` : '--';
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header section */}
@@ -104,7 +109,7 @@ export const RiskAnalysisView: React.FC = () => {
         <div className="glass-panel p-5 rounded-xl space-y-1">
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Portfolio 95% Daily VaR</div>
           <div className="text-3xl font-extrabold text-amber-500">
-            {riskData?.portfolio_var_95_pct.toFixed(2) || '2.15'}%
+            {var95}
           </div>
           <div className="text-[11px] pt-1 font-sans" style={{ color: 'var(--text-muted)' }}>
             Max expected 1-day loss with 95% statistical confidence.
@@ -114,7 +119,7 @@ export const RiskAnalysisView: React.FC = () => {
         <div className="glass-panel p-5 rounded-xl space-y-1">
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Portfolio 99% Daily VaR</div>
           <div className="text-3xl font-extrabold" style={{ color: 'var(--down)' }}>
-            {riskData?.portfolio_var_99_pct.toFixed(2) || '3.20'}%
+            {var99}
           </div>
           <div className="text-[11px] pt-1 font-sans" style={{ color: 'var(--text-muted)' }}>
             Tail-risk cutoff with 99% confidence interval.
@@ -124,7 +129,7 @@ export const RiskAnalysisView: React.FC = () => {
         <div className="glass-panel p-5 rounded-xl space-y-1">
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Conditional VaR (CVaR 95%)</div>
           <div className="text-3xl font-extrabold text-purple-500 dark:text-purple-400">
-            {riskData?.portfolio_cvar_95_pct.toFixed(2) || '2.82'}%
+            {cvar95}
           </div>
           <div className="text-[11px] pt-1 font-sans" style={{ color: 'var(--text-muted)' }}>
             Expected Shortfall in extreme 5% loss tails.
@@ -134,7 +139,7 @@ export const RiskAnalysisView: React.FC = () => {
         <div className="glass-panel p-5 rounded-xl space-y-1">
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Diversification Ratio</div>
           <div className="text-3xl font-extrabold" style={{ color: 'var(--accent)' }}>
-            {riskData?.diversification_ratio.toFixed(2) || '1.46'}x
+            {divRatio}
           </div>
           <div className="text-[11px] pt-1 font-sans" style={{ color: 'var(--up)' }}>
             Effective multi-asset risk reduction coefficient.

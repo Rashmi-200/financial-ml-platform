@@ -156,7 +156,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Test RMSE</div>
             <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--text-primary)' }}>
-              {prod?.test_rmse || '0.02279'}
+              {prod?.test_rmse !== undefined ? prod.test_rmse.toFixed(5) : '--'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--up)' }}>Optimal Bounds</div>
           </div>
@@ -164,7 +164,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Test MAE</div>
             <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--text-secondary)' }}>
-              {prod?.test_mae || '0.01732'}
+              {prod?.test_mae !== undefined ? prod.test_mae.toFixed(5) : '--'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>Mean Absolute Error</div>
           </div>
@@ -172,7 +172,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Directional Accuracy %</div>
             <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--up)' }}>
-              {prod?.directional_accuracy_pct || '53.30'}%
+              {prod?.directional_accuracy_pct !== undefined ? `${prod.directional_accuracy_pct.toFixed(2)}%` : '--%'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--up)' }}>Superior to Random Walk</div>
           </div>
@@ -180,7 +180,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Inference Latency</div>
             <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--accent)' }}>
-              {prod?.average_latency_ms || '14.8'} ms
+              {prod?.average_latency_ms !== undefined ? `${prod.average_latency_ms.toFixed(1)} ms` : '-- ms'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>P99 SLA: &lt;50ms</div>
           </div>
@@ -188,7 +188,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Throughput</div>
             <div className="text-xl font-extrabold text-purple-500 dark:text-purple-400 mt-1">
-              {prod?.throughput_req_sec || '420'} req/s
+              {prod?.throughput_req_sec !== undefined ? `${prod.throughput_req_sec.toFixed(0)} req/s` : '-- req/s'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>Batched CUDA Tensor</div>
           </div>
@@ -196,7 +196,7 @@ export const ModelMonitorView: React.FC = () => {
           <div className="p-3.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
             <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>System Uptime</div>
             <div className="text-xl font-extrabold mt-1" style={{ color: 'var(--up)' }}>
-              {prod?.uptime_pct || '99.98'}%
+              {prod?.uptime_pct !== undefined ? `${prod.uptime_pct.toFixed(2)}%` : '--%'}
             </div>
             <div className="text-[10px] mt-0.5" style={{ color: 'var(--up)' }}>Zero Degradation</div>
           </div>

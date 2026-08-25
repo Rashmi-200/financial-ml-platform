@@ -77,6 +77,15 @@ export const MarketOverviewView: React.FC<MarketOverviewViewProps> = ({ onNaviga
     });
   }, []);
 
+  const totalAdvDec = (overview?.market_breadth?.advancers ?? 0) + (overview?.market_breadth?.decliners ?? 0) + (overview?.market_breadth?.unchanged ?? 0);
+  const advPctStr = totalAdvDec > 0 ? `${(((overview?.market_breadth?.advancers ?? 0) / totalAdvDec) * 100).toFixed(1)}% of universe` : '--';
+  const decPctStr = totalAdvDec > 0 ? `${(((overview?.market_breadth?.decliners ?? 0) / totalAdvDec) * 100).toFixed(1)}% of universe` : '--';
+  const vixItem = overview?.indices?.find((i) => i.symbol === '^VIX');
+  const vixValue = vixItem ? vixItem.value.toFixed(2) : '--';
+  const adRatio = overview?.market_breadth?.advance_decline_ratio !== undefined ? overview.market_breadth.advance_decline_ratio.toFixed(2) : '--';
+  const adLabel = (overview?.market_breadth?.advance_decline_ratio ?? 1) >= 1 ? 'Positive Market Breadth' : 'Negative Market Breadth';
+  const vixLabel = (vixItem?.value ?? 15) < 20 ? 'Normal Volatility Environment' : 'Elevated Volatility Environment';
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header section */}
@@ -92,7 +101,7 @@ export const MarketOverviewView: React.FC<MarketOverviewViewProps> = ({ onNaviga
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-lg text-xs font-mono" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-            Regime: <strong style={{ color: 'var(--up)' }}>Expansionary Momentum</strong>
+            Regime: <strong style={{ color: 'var(--up)' }}>{overview?.market_breadth?.market_regime || 'Active'}</strong>
           </span>
         </div>
       </div>
@@ -102,31 +111,31 @@ export const MarketOverviewView: React.FC<MarketOverviewViewProps> = ({ onNaviga
         <div className="glass-panel p-4 rounded-xl">
           <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>Advancing Issues</div>
           <div className="text-2xl font-bold font-mono mt-1" style={{ color: 'var(--up)' }}>
-            {overview?.market_breadth?.advancers || 342}
+            {overview?.market_breadth?.advancers ?? '--'}
           </div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>68.4% of universe</div>
+          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{advPctStr}</div>
         </div>
 
         <div className="glass-panel p-4 rounded-xl">
           <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>Declining Issues</div>
           <div className="text-2xl font-bold font-mono mt-1" style={{ color: 'var(--down)' }}>
-            {overview?.market_breadth?.decliners || 158}
+            {overview?.market_breadth?.decliners ?? '--'}
           </div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>31.6% of universe</div>
+          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{decPctStr}</div>
         </div>
 
         <div className="glass-panel p-4 rounded-xl">
           <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>A/D Ratio</div>
           <div className="text-2xl font-bold font-mono mt-1" style={{ color: 'var(--accent)' }}>
-            {overview?.market_breadth?.advance_decline_ratio?.toFixed(2) || '2.16'}
+            {adRatio}
           </div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--up)' }}>Strong Bullish Breadth</div>
+          <div className="text-[11px] mt-0.5" style={{ color: 'var(--up)' }}>{adLabel}</div>
         </div>
 
         <div className="glass-panel p-4 rounded-xl">
           <div className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>Market Volatility (VIX)</div>
-          <div className="text-2xl font-bold font-mono mt-1 text-indigo-500">14.32</div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>Low Tail-Risk Regime</div>
+          <div className="text-2xl font-bold font-mono mt-1 text-indigo-500">{vixValue}</div>
+          <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{vixLabel}</div>
         </div>
       </div>
 
