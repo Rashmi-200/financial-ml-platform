@@ -1,0 +1,103 @@
+{
+  "last_trained_date": "2026-08-28 16:34:37 UTC",
+  "next_retraining_date": "2026-09-01 00:00:00 UTC",
+  "last_drift_check_date": "2026-08-28 16:34:37 UTC",
+  "retrain_trigger_reason": "Forced retrain",
+  "drift_triggered": true,
+  "max_psi_score": 7.2797,
+  "max_wasserstein_score": 3.1012,
+  "feature_drift_scores": {
+    "rsi_14": {
+      "psi": 0.0105,
+      "wasserstein": 0.0835,
+      "drift": true,
+      "baseline_mean": 55.1371,
+      "current_mean": 53.8759
+    },
+    "macd_hist": {
+      "psi": 0.8209,
+      "wasserstein": 1.0253,
+      "drift": true,
+      "baseline_mean": 0.0044,
+      "current_mean": -0.001
+    },
+    "bb_width": {
+      "psi": 3.1882,
+      "wasserstein": 1.4871,
+      "drift": true,
+      "baseline_mean": 14.1693,
+      "current_mean": 40.6023
+    },
+    "fft_dominant_freq": {
+      "psi": 0.0965,
+      "wasserstein": 0.0782,
+      "drift": true,
+      "baseline_mean": 0.271,
+      "current_mean": 0.264
+    },
+    "var_95": {
+      "psi": 0.1335,
+      "wasserstein": 0.1281,
+      "drift": true,
+      "baseline_mean": -0.0265,
+      "current_mean": -0.0278
+    },
+    "volatility_30d": {
+      "psi": 0.0074,
+      "wasserstein": 0.0363,
+      "drift": false,
+      "baseline_mean": 0.0012,
+      "current_mean": 0.0011
+    },
+    "wavelet_approx_energy": {
+      "psi": 7.2797,
+      "wasserstein": 3.1012,
+      "drift": true,
+      "baseline_mean": 1320348.8733,
+      "current_mean": 7424743.5082
+    },
+    "atr_14": {
+      "psi": 4.8185,
+      "wasserstein": 1.6908,
+      "drift": true,
+      "baseline_mean": 2.8844,
+      "current_mean": 8.1769
+    },
+    "sharpe_30d": {
+      "psi": 0.0134,
+      "wasserstein": 0.0953,
+      "drift": true,
+      "baseline_mean": 1.3326,
+      "current_mean": 1.0679
+    }
+  },
+  "champion_metrics": {
+    "sharpe_ratio": 1.097,
+    "directional_accuracy_pct": 50.25,
+    "test_rmse": 0.02052,
+    "best_params": {
+      "num_leaves": 43,
+      "max_depth": 8,
+      "learning_rate": 0.020765913191928023,
+      "feature_fraction": 0.8892384618042701,
+      "n_estimators": 114
+    },
+    "model_version": "v1.0-prod"
+  },
+  "challenger_metrics": {
+    "sharpe_ratio": 1.097,
+    "directional_accuracy_pct": 50.25,
+    "test_rmse": 0.02052,
+    "best_params": {
+      "num_leaves": 43,
+      "max_depth": 8,
+      "learning_rate": 0.020765913191928023,
+      "feature_fraction": 0.8892384618042701,
+      "n_estimators": 114
+    },
+    "model_version": "challenger"
+  },
+  "last_promotion_outcome": "PROMOTED: Sharpe 1.0970 >= 1.0690, DirAcc 50.25% >= 50.25%",
+  "total_retrains": 1,
+  "consecutive_drift_alerts": 1
+}

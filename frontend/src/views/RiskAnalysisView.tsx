@@ -14,7 +14,7 @@ import { RiskAnalysisResponse } from '../types';
 export const RiskAnalysisView: React.FC = () => {
   const [riskData, setRiskData] = useState<RiskAnalysisResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [lookbackDays, setLookbackDays] = useState<number>(120);
+  const [lookbackDays, setLookbackDays] = useState<number>(128);
   const [confidenceLevel, setConfidenceLevel] = useState<number>(0.95);
 
   const fetchRiskData = (lookback: number, confidence: number) => {
@@ -61,7 +61,7 @@ export const RiskAnalysisView: React.FC = () => {
             {[
               { label: '30D', val: 30 },
               { label: '60D', val: 60 },
-              { label: '120D', val: 120 },
+              { label: '128D', val: 128 },
               { label: '1Y', val: 252 },
             ].map((opt) => (
               <button
@@ -153,7 +153,7 @@ export const RiskAnalysisView: React.FC = () => {
           <div className="flex items-center gap-2">
             <Grid className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <h3 className="text-base font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              Cross-Asset Correlation Matrix (120-Day Gold Parquet Return Series)
+              Cross-Asset Correlation Matrix ({lookbackDays === 252 ? '1Y' : `${lookbackDays}D`} · DuckDB Gold Parquet Return Series)
             </h3>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono" style={{ color: 'var(--text-muted)' }}>

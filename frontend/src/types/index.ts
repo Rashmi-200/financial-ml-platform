@@ -212,7 +212,34 @@ export interface ModelMonitorResponse {
   feature_drift: FeatureDriftItem[];
   error_drift_timeline: PredictionErrorDriftItem[];
   benchmarks: ModelBenchmarkItem[];
+  drift_engine?: {
+    max_psi_score: number;
+    max_wasserstein_score: number;
+    drift_triggered: boolean;
+    retrain_trigger_reason: string;
+    last_drift_check_date: string;
+    last_trained_date: string;
+    next_retraining_date: string;
+    total_retrains: number;
+    consecutive_drift_alerts: number;
+    last_promotion_outcome: string;
+    psi_threshold: number;
+    wasserstein_threshold: number;
+    cron_schedule: string;
+    champion: {
+      sharpe_ratio: number;
+      directional_accuracy_pct: number;
+      test_rmse: number;
+      version: string;
+    };
+    challenger: {
+      sharpe_ratio: number;
+      directional_accuracy_pct: number;
+      test_rmse: number;
+    } | null;
+  };
 }
+
 
 export interface BacktestRequest {
   initial_capital: number;

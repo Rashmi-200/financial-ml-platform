@@ -45,6 +45,10 @@ export const api = {
   getNews: () => fetchJSON<NewsItem[]>('/api/v1/news'),
   getModelMonitor: (psi_threshold = 0.10) =>
     fetchJSON<ModelMonitorResponse>(`/api/v1/model/monitor?psi_threshold=${psi_threshold}`),
+  triggerRetrain: (force = true) =>
+    fetchJSON<{ status: string; message: string; state?: any }>(`/api/v1/model/retrain?force=${force}`, {
+      method: 'POST',
+    }),
   runBacktest: (payload: BacktestRequest) =>
     fetchJSON<BacktestResponse>('/api/v1/backtest', {
       method: 'POST',
