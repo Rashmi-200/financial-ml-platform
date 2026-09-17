@@ -25,7 +25,7 @@ for candidate in [
         PROJECT_ROOT = candidate
         break
 else:
-        PROJECT_ROOT = Path("/opt/airflow")
+    PROJECT_ROOT = Path("/opt/airflow")
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -55,8 +55,6 @@ try:
         "retry_delay": timedelta(minutes=5),
     }
 
-    # Scheduled for 17:00 (5:00 PM) EST Mon-Fri
-    # Airflow cron expression: 0 17 * * 1-5 (UTC offset should be set in airflow.cfg / UI)
     dag = DAG(
         "financial_ml_pipeline",
         default_args=default_args,
@@ -89,63 +87,8 @@ try:
         dag=dag,
     )
 
-    # Task dependencies: t1 -> t2 -> t3 -> t4
     t1 >> t2 >> t3 >> t4
 
     AIRFLOW_AVAILABLE = True
 except ImportError:
     AIRFLOW_AVAILABLE = False
-
-
-# --------------------------------------------------------------------------
-# 2. APScheduler Standalone Runner (for running without full Airflow setup)
-# --------------------------------------------------------------------------
-def start_apscheduler(run_immediately: bool = False) -> None:
-    """Start APScheduler daemon to trigger pipeline every weekday at 5:00 PM EST."""
-    try:
-        from apscheduler.schedulers.blocking import BlockingScheduler
-        from apscheduler.triggers.cron import CronTrigger
-    except ImportError:
-        print("[ERROR] APScheduler is not installed. Install via `pip install apscheduler`.")
-        sys.exit(1)
-
-    scheduler = BlockingScheduler()
-
-    # Schedule: Weekdays (Mon-Fri) at 17:00 US/Eastern
-    trigger = CronTrigger(
-        day_of_week="mon-fri",
-        hour=17,
-        minute=0,
-        timezone="America/New_York",
-    )
-
-    scheduler.add_job(
-        run_pipeline,
-        trigger=trigger,
-        id="financial_ml_etl_job",
-        name="Financial ML Platform ETL Pipeline",
-        replace_existing=True,
-    )
-
-    print("=" * 80)
-    print("APScheduler Service Initialized")
-    print("Schedule    : Every Weekday (Mon-Fri) at 17:00 EST (5:00 PM Market Close)")
-    print("Timezone    : America/New_York")
-    print("Airflow DAG : " + ("Registered & Active" if AIRFLOW_AVAILABLE else "Airflow not detected (standalone mode)"))
-    print("=" * 80)
-
-    if run_immediately:
-        print("\n[INFO] Executing immediate dry-run trigger...")
-        run_pipeline()
-
-    print("\n[INFO] Scheduler active. Waiting for scheduled triggers (Press Ctrl+C to stop)...")
-    try:
-        scheduler.start()
-    except (KeyboardInterrupt, SystemExit):
-        print("\n[INFO] Scheduler stopped.")
-
-
-if __name__ == "__main__":
-    # If run from command line, start scheduler (or dry-run if --now passed)
-    run_now = "--now" in sys.argv or "--dry-run" in sys.argv
-    start_apscheduler(run_immediately=run_now)

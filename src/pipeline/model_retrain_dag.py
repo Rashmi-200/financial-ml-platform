@@ -42,7 +42,19 @@ import numpy as np
 import polars as pl
 from scipy.stats import wasserstein_distance
 
-PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
+for candidate in [
+    Path(__file__).resolve().parent.parent,
+    Path(__file__).resolve().parent,
+    Path(__file__).resolve().parents[2] if len(Path(__file__).resolve().parents) > 2 else Path(__file__).resolve().parent,
+    Path("/opt/airflow"),
+    Path("/app"),
+]:
+    if (candidate / "src").exists():
+        PROJECT_ROOT = candidate
+        break
+else:
+        PROJECT_ROOT = Path("/opt/airflow")
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 

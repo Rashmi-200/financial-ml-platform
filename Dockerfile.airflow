@@ -1,0 +1,19 @@
+FROM apache/airflow:2.7.2-python3.11
+
+USER root
+
+# Install system dependencies for LightGBM (libgomp1 only — build-essential not needed at runtime)
+RUN apt-get update && apt-get install -y --fix-missing \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+USER airflow
+
+# Install torch CPU-only FIRST to avoid NVIDIA CUDA timeout on pypi.nvidia.com
+RUN pip install --no-cache-dir \
+    torch \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# Copy requirements and install the rest
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

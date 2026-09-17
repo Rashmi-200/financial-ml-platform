@@ -1,8 +1,8 @@
 {
-  "last_trained_date": "2026-08-28 16:34:37 UTC",
-  "next_retraining_date": "2026-09-01 00:00:00 UTC",
-  "last_drift_check_date": "2026-08-28 16:34:37 UTC",
-  "retrain_trigger_reason": "Forced retrain",
+  "last_trained_date": "2026-09-16 08:41:29 UTC",
+  "next_retraining_date": "2026-10-01 00:00:00 UTC",
+  "last_drift_check_date": "2026-09-16 08:41:29 UTC",
+  "retrain_trigger_reason": "Forced retrain (API) by admin@quantvision.com",
   "drift_triggered": true,
   "max_psi_score": 7.2797,
   "max_wasserstein_score": 3.1012,
@@ -72,32 +72,25 @@
     }
   },
   "champion_metrics": {
-    "sharpe_ratio": 1.097,
-    "directional_accuracy_pct": 50.25,
-    "test_rmse": 0.02052,
-    "best_params": {
-      "num_leaves": 43,
-      "max_depth": 8,
-      "learning_rate": 0.020765913191928023,
-      "feature_fraction": 0.8892384618042701,
-      "n_estimators": 114
-    },
-    "model_version": "v1.0-prod"
+    "sharpe_ratio": 1.1712,
+    "directional_accuracy_pct": 50.49,
+    "test_rmse": 0.01979,
+    "model_version": "champion"
   },
   "challenger_metrics": {
-    "sharpe_ratio": 1.097,
-    "directional_accuracy_pct": 50.25,
-    "test_rmse": 0.02052,
+    "sharpe_ratio": 1.0117,
+    "directional_accuracy_pct": 49.75,
+    "test_rmse": 0.01948,
     "best_params": {
-      "num_leaves": 43,
-      "max_depth": 8,
-      "learning_rate": 0.020765913191928023,
-      "feature_fraction": 0.8892384618042701,
-      "n_estimators": 114
+      "num_leaves": 10,
+      "max_depth": 6,
+      "learning_rate": 0.007464728538338035,
+      "feature_fraction": 0.8660747389054873,
+      "n_estimators": 106
     },
     "model_version": "challenger"
   },
-  "last_promotion_outcome": "PROMOTED: Sharpe 1.0970 >= 1.0690, DirAcc 50.25% >= 50.25%",
-  "total_retrains": 1,
-  "consecutive_drift_alerts": 1
+  "last_promotion_outcome": "REJECTED: Sharpe 1.0117 vs 1.1712 (FAIL), DirAcc 49.75% vs 50.49% (FAIL)",
+  "total_retrains": 9,
+  "consecutive_drift_alerts": 9
 }

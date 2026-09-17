@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies for LightGBM
+RUN apt-get update && apt-get install -y --fix-missing \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install torch CPU-only FIRST (before requirements.txt) to avoid NVIDIA CUDA timeouts
+RUN pip install --no-cache-dir \
+    torch \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# Copy requirements and install the rest of the packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY src /app/src
+
+# Expose port
+EXPOSE 8000
+
+# Run the FastAPI server
+CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "8000"]

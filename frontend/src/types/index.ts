@@ -5,7 +5,60 @@ export type TabType =
   | 'risk_analysis'
   | 'portfolio_simulator'
   | 'news'
-  | 'model_monitor';
+  | 'model_monitor'
+  | 'admin_console';
+
+export interface User {
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
+}
+
+export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  user: User;
+}
+
+export interface SystemHealthData {
+  timestamp: string;
+  cpu_percent: number;
+  ram_percent: number;
+  ram_used_gb: number;
+  ram_total_gb: number;
+  disk_percent: number;
+  disk_used_gb: number;
+  disk_total_gb: number;
+  api_latency_ms: number;
+  active_services: {
+    api_server: string;
+    ml_inference_engine: string;
+    duckdb_database: string;
+    websocket_streamer: string;
+  };
+  admin_user?: string;
+}
+
+export interface RetrainResult {
+  status: string;
+  message: string;
+  triggered_by?: string;
+  timestamp: string;
+  duration_seconds?: number;
+  drift_detected?: boolean;
+  max_psi_score?: number;
+  max_wasserstein_score?: number;
+  promoted?: boolean;
+  promotion_outcome?: string;
+  total_retrains?: number;
+  last_trained_date?: string;
+  champion_model?: {
+    sharpe_ratio: number;
+    directional_accuracy_pct: number;
+    test_rmse: number;
+  };
+}
+
 
 export interface HealthResponse {
   status: string;

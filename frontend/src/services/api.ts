@@ -9,6 +9,7 @@ import {
   ModelMonitorResponse,
   BacktestRequest,
   BacktestResponse,
+  RetrainResult,
 } from '../types';
 
 const API_BASE = 'http://127.0.0.1:8000';
@@ -45,10 +46,13 @@ export const api = {
   getNews: () => fetchJSON<NewsItem[]>('/api/v1/news'),
   getModelMonitor: (psi_threshold = 0.10) =>
     fetchJSON<ModelMonitorResponse>(`/api/v1/model/monitor?psi_threshold=${psi_threshold}`),
-  triggerRetrain: (force = true) =>
-    fetchJSON<{ status: string; message: string; state?: any }>(`/api/v1/model/retrain?force=${force}`, {
+  triggerRetrain: () => {
+    const token = localStorage.getItem('qv_token') ?? '';
+    return fetchJSON<RetrainResult>('/api/v1/model/retrain', {
       method: 'POST',
-    }),
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
   runBacktest: (payload: BacktestRequest) =>
     fetchJSON<BacktestResponse>('/api/v1/backtest', {
       method: 'POST',

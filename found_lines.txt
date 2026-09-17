@@ -1,0 +1,2 @@
+Line 1857: print(f"[RETRAIN]    Champion → Sharpe={champion_metrics.get('sharpe_ratio', 0):.4f}  "
+Line 1865: print(f"[RETRAIN]    Challenger → Sharpe={challenger_metrics.get('sharpe_ratio', 0):.4f}  "

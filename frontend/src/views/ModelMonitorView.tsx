@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Bot,
   Activity,
@@ -13,6 +13,8 @@ import {
   Sliders,
   Layers,
   ArrowRight,
+  X,
+  Clock,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -25,15 +27,24 @@ import {
   Legend,
 } from 'recharts';
 import { api } from '../services/api';
-import { ModelMonitorResponse } from '../types';
+import { ModelMonitorResponse, RetrainResult } from '../types';
+import { useAuth } from '../context/AuthContext';
+
+interface ToastState {
+  visible: boolean;
+  type: 'success' | 'error';
+  result: RetrainResult | null;
+}
 
 export const ModelMonitorView: React.FC = () => {
+  const { isAdmin } = useAuth();
   const [monitorData, setMonitorData] = useState<ModelMonitorResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [retrainingTriggered, setRetrainingTriggered] = useState<boolean>(false);
   const [psiThreshold, setPsiThreshold] = useState<number>(0.10);
+  const [toast, setToast] = useState<ToastState>({ visible: false, type: 'success', result: null });
 
-  const fetchMonitor = (threshold: number) => {
+  const fetchMonitor = useCallback((threshold: number) => {
     api.getModelMonitor(threshold)
       .then((data) => {
         setMonitorData(data);
@@ -43,23 +54,38 @@ export const ModelMonitorView: React.FC = () => {
         console.error(err);
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchMonitor(psiThreshold);
-    const interval = setInterval(() => {
-      fetchMonitor(psiThreshold);
-    }, 3000);
+    const interval = setInterval(() => fetchMonitor(psiThreshold), 3000);
     return () => clearInterval(interval);
-  }, [psiThreshold]);
+  }, [psiThreshold, fetchMonitor]);
+
+  const dismissToast = () => setToast(t => ({ ...t, visible: false }));
 
   const handleRetrainTrigger = async () => {
     setRetrainingTriggered(true);
+    setToast({ visible: false, type: 'success', result: null });
     try {
-      await api.triggerRetrain(true);
+      const result = await api.triggerRetrain();
+      // Immediately refresh monitor data so metrics update without waiting for next poll
       fetchMonitor(psiThreshold);
-    } catch (err) {
-      console.error("Retrain trigger error:", err);
+      setToast({ visible: true, type: result.status === 'SUCCESS' ? 'success' : 'error', result });
+      // Auto-dismiss after 12 seconds
+      setTimeout(dismissToast, 12000);
+    } catch (err: any) {
+      console.error('Retrain trigger error:', err);
+      setToast({
+        visible: true,
+        type: 'error',
+        result: {
+          status: 'ERROR',
+          message: err?.message ?? 'Pipeline request failed. Check backend logs.',
+          timestamp: new Date().toISOString(),
+        },
+      });
+      setTimeout(dismissToast, 8000);
     } finally {
       setRetrainingTriggered(false);
     }
@@ -70,6 +96,104 @@ export const ModelMonitorView: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-12">
+      {/* ── RETRAIN TOAST NOTIFICATION ──────────────────────────────────── */}
+      {toast.visible && (
+        <div
+          className="fixed top-20 right-6 z-50 w-[420px] rounded-2xl shadow-2xl border overflow-hidden"
+          style={{
+            background: toast.type === 'success' ? 'rgba(15, 23, 42, 0.97)' : 'rgba(30, 10, 10, 0.97)',
+            borderColor: toast.type === 'success' ? 'rgba(34,211,238,0.3)' : 'rgba(239,68,68,0.4)',
+            backdropFilter: 'blur(16px)',
+            animation: 'slideInRight 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+          }}
+        >
+          {/* Top colour bar */}
+          <div
+            className="h-1 w-full"
+            style={{ background: toast.type === 'success' ? 'var(--accent)' : '#ef4444' }}
+          />
+          <div className="p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                {toast.type === 'success' ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-400" />
+                )}
+                <div>
+                  <div className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                    {toast.type === 'success' ? '✅ Retraining Pipeline Complete' : '❌ Pipeline Error'}
+                  </div>
+                  <div className="text-xs mt-0.5 font-mono leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    {toast.result?.message}
+                  </div>
+                </div>
+              </div>
+              <button onClick={dismissToast} className="shrink-0 cursor-pointer" style={{ color: 'var(--text-muted)' }}>
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Metrics grid — only on success */}
+            {toast.type === 'success' && toast.result && (
+              <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-xs">
+                {toast.result.promoted !== undefined && (
+                  <div className="p-2.5 rounded-xl border col-span-2" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Champion/Challenger Outcome</div>
+                    <div className={`font-bold mt-0.5 text-xs leading-snug ${toast.result.promoted ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {toast.result.promotion_outcome}
+                    </div>
+                  </div>
+                )}
+                {toast.result.total_retrains !== undefined && (
+                  <div className="p-2.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Total Retrains</div>
+                    <div className="font-bold mt-0.5" style={{ color: 'var(--text-primary)' }}>{toast.result.total_retrains}</div>
+                  </div>
+                )}
+                {toast.result.duration_seconds !== undefined && (
+                  <div className="p-2.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Pipeline Duration</div>
+                    <div className="font-bold mt-0.5" style={{ color: 'var(--accent)' }}>{toast.result.duration_seconds.toFixed(1)}s</div>
+                  </div>
+                )}
+                {toast.result.max_psi_score !== undefined && (
+                  <div className="p-2.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Max PSI Score</div>
+                    <div className={`font-bold mt-0.5 ${(toast.result.max_psi_score ?? 0) > 0.25 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      {toast.result.max_psi_score?.toFixed(4)}
+                    </div>
+                  </div>
+                )}
+                {toast.result.last_trained_date && (
+                  <div className="p-2.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Last Trained</div>
+                    <div className="font-bold mt-0.5 text-[11px]" style={{ color: 'var(--text-secondary)' }}>{toast.result.last_trained_date}</div>
+                  </div>
+                )}
+                {toast.result.champion_model && (
+                  <div className="p-2.5 rounded-xl border" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
+                    <div className="text-[10px] uppercase" style={{ color: 'var(--text-muted)' }}>Champion Sharpe</div>
+                    <div className="font-bold mt-0.5 text-amber-400">{toast.result.champion_model.sharpe_ratio.toFixed(4)}</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Auto-dismiss progress bar */}
+            <div className="mt-3 h-0.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-muted)' }}>
+              <div
+                className="h-full rounded-full"
+                style={{
+                  background: toast.type === 'success' ? 'var(--accent)' : '#ef4444',
+                  animation: `shrinkBar ${toast.type === 'success' ? '12' : '8'}s linear forwards`,
+                  width: '100%',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -106,15 +230,26 @@ export const ModelMonitorView: React.FC = () => {
             ))}
           </div>
 
-          <button
-            onClick={handleRetrainTrigger}
-            disabled={retrainingTriggered}
-            className="px-4 py-2 rounded-xl font-bold text-xs font-mono flex items-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
-            style={{ background: 'var(--accent)', color: '#fff' }}
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${retrainingTriggered ? 'animate-spin' : ''}`} />
-            {retrainingTriggered ? 'Triggering Retraining Pipeline...' : 'Trigger Pipeline Retrain'}
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={handleRetrainTrigger}
+              disabled={retrainingTriggered}
+              className="px-4 py-2 rounded-xl font-bold text-xs font-mono flex items-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
+              style={{ background: 'var(--accent)', color: '#fff' }}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${retrainingTriggered ? 'animate-spin' : ''}`} />
+              {retrainingTriggered ? 'Triggering Retraining Pipeline...' : 'Trigger Pipeline Retrain'}
+            </button>
+          ) : (
+            <div
+              className="px-4 py-2 rounded-xl font-bold text-xs font-mono flex items-center gap-2 opacity-40 cursor-not-allowed select-none"
+              style={{ background: 'var(--bg-muted)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+              title="Admin privileges required to trigger retraining"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Trigger Pipeline Retrain
+            </div>
+          )}
         </div>
       </div>
 

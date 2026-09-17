@@ -7,9 +7,11 @@ import {
   Briefcase,
   Newspaper,
   Bot,
+  Shield,
   ChevronRight,
 } from 'lucide-react';
 import { TabType } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -22,18 +24,27 @@ interface NavItem {
   sublabel: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: string;
+  badgeStyle?: 'live' | 'pro' | 'admin';
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
-  const navItems: NavItem[] = [
+  const { isAdmin } = useAuth();
+
+  const baseItems: NavItem[] = [
     { id: 'dashboard',          label: 'Dashboard',          sublabel: 'Overview & AI Feed',     icon: Home },
     { id: 'market_overview',    label: 'Market Overview',    sublabel: 'Sectors & Heatmaps',     icon: TrendingUp },
     { id: 'market_analysis',    label: 'Market Analysis',    sublabel: 'Technical & AI View',    icon: BarChart3 },
     { id: 'risk_analysis',      label: 'Risk Analysis',      sublabel: 'VaR, CVaR & Drawdowns',  icon: AlertTriangle },
-    { id: 'portfolio_simulator',label: 'Portfolio Simulator',sublabel: 'Backtesting Engine',     icon: Briefcase, badge: 'PRO' },
+    { id: 'portfolio_simulator',label: 'Portfolio Simulator',sublabel: 'Backtesting Engine',     icon: Briefcase, badge: 'PRO', badgeStyle: 'pro' },
     { id: 'news',               label: 'News',               sublabel: 'Sentiment Feed',         icon: Newspaper },
-    { id: 'model_monitor',      label: 'Model Monitor',      sublabel: 'ML Health & Drift',      icon: Bot, badge: 'LIVE' },
   ];
+
+  const adminItems: NavItem[] = [
+    { id: 'model_monitor',      label: 'Model Monitor',      sublabel: 'ML Health & Drift',      icon: Bot, badge: 'LIVE', badgeStyle: 'live' },
+    { id: 'admin_console',      label: 'Admin Console',      sublabel: 'MLOps & Telemetry',      icon: Shield, badge: 'ADMIN', badgeStyle: 'admin' },
+  ];
+
+  const navItems = isAdmin ? [...baseItems, ...adminItems] : baseItems;
 
   return (
     <aside
@@ -67,9 +78,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
               style={
                 isActive
                   ? {
-                      background: 'rgba(34,211,238,0.08)',
-                      border: '1px solid rgba(34,211,238,0.2)',
-                      color: 'var(--accent)',
+                      background: item.id === 'admin_console' ? 'rgba(245,158,11,0.08)' : 'rgba(34,211,238,0.08)',
+                      border: item.id === 'admin_console' ? '1px solid rgba(245,158,11,0.25)' : '1px solid rgba(34,211,238,0.2)',
+                      color: item.id === 'admin_console' ? '#F59E0B' : 'var(--accent)',
                     }
                   : {
                       background: 'transparent',
@@ -84,7 +95,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
                   className="p-1.5 rounded-lg transition-colors shrink-0"
                   style={
                     isActive
-                      ? { background: 'rgba(34,211,238,0.15)', color: 'var(--accent)' }
+                      ? {
+                          background: item.id === 'admin_console' ? 'rgba(245,158,11,0.15)' : 'rgba(34,211,238,0.15)',
+                          color: item.id === 'admin_console' ? '#F59E0B' : 'var(--accent)',
+                        }
                       : { background: 'var(--bg-muted)', color: 'var(--text-muted)' }
                   }
                 >
@@ -98,7 +112,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
                       <span
                         className="text-[9px] font-mono px-1.5 rounded font-bold"
                         style={
-                          item.badge === 'LIVE'
+                          item.badgeStyle === 'admin'
+                            ? { background: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }
+                            : item.badgeStyle === 'live'
                             ? { background: 'rgba(34,197,94,0.12)', color: 'var(--up)', border: '1px solid rgba(34,197,94,0.3)' }
                             : { background: 'rgba(99,102,241,0.12)', color: '#818CF8', border: '1px solid rgba(99,102,241,0.3)' }
                         }
@@ -120,7 +136,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
           );
         })}
       </nav>
-      {/* Footer intentionally left empty — no version/status clutter */}
     </aside>
   );
 };
