@@ -35,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
     { id: 'market_overview',    label: 'Market Overview',    sublabel: 'Sectors & Heatmaps',     icon: TrendingUp },
     { id: 'market_analysis',    label: 'Market Analysis',    sublabel: 'Technical & AI View',    icon: BarChart3 },
     { id: 'risk_analysis',      label: 'Risk Analysis',      sublabel: 'VaR, CVaR & Drawdowns',  icon: AlertTriangle },
-    { id: 'portfolio_simulator',label: 'Portfolio Simulator',sublabel: 'Backtesting Engine',     icon: Briefcase, badge: 'PRO', badgeStyle: 'pro' },
+    { id: 'portfolio_simulator',label: 'Portfolio Simulator',sublabel: 'Backtesting Engine',     icon: Briefcase },
     { id: 'news',               label: 'News',               sublabel: 'Sentiment Feed',         icon: Newspaper },
   ];
 

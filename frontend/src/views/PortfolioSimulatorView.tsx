@@ -32,9 +32,9 @@ import { BacktestRequest, BacktestResponse } from '../types';
 const AVAILABLE_TICKERS = ['AAPL', 'NVDA', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'JPM', 'V', 'WMT'];
 
 const STRATEGIES = [
-  { id: 'AI Ensemble Momentum', name: 'AI Ensemble Momentum (PyTorch + LightGBM)' },
-  { id: 'Risk-Adjusted Trend Following', name: 'Risk-Adjusted Trend Following (VaR Filtered)' },
-  { id: 'Mean Reversion', name: 'Mean Reversion (Bollinger + RSI Extreme)' },
+  { id: 'AI Ensemble Momentum', name: 'AI Ensemble Momentum Strategy' },
+  { id: 'Risk-Adjusted Trend Following', name: 'Risk-Adjusted Trend Following Strategy' },
+  { id: 'Mean Reversion', name: 'Mean Reversion Strategy' },
   { id: 'Equal Weight', name: 'Equal-Weighted Benchmark Portfolio' },
   { id: 'Buy & Hold', name: 'Standard Buy & Hold Portfolio' },
 ];
@@ -105,7 +105,7 @@ export const PortfolioSimulatorView: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-lg text-xs font-mono" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-            Engine Mode: <strong style={{ color: 'var(--up)' }}>Deterministic Backtester</strong>
+            Simulation Mode: <strong style={{ color: 'var(--up)' }}>Historical Backtest</strong>
           </span>
         </div>
       </div>

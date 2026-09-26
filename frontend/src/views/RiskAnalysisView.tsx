@@ -153,7 +153,7 @@ export const RiskAnalysisView: React.FC = () => {
           <div className="flex items-center gap-2">
             <Grid className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <h3 className="text-base font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              Cross-Asset Correlation Matrix ({lookbackDays === 252 ? '1Y' : `${lookbackDays}D`} · DuckDB Gold Parquet Return Series)
+              Cross-Asset Correlation Matrix ({lookbackDays === 252 ? '1Y' : `${lookbackDays}D`})
             </h3>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono" style={{ color: 'var(--text-muted)' }}>

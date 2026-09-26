@@ -68,9 +68,6 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="text-lg font-extrabold tracking-tight text-[var(--text-primary)] font-sans leading-none">
               Quant<span className="text-[var(--accent)]">Vision</span>
             </h1>
-            <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-mono font-bold tracking-widest uppercase rounded bg-[var(--bg-muted)] text-[var(--text-muted)] border border-[var(--border-strong)]">
-              PRO
-            </span>
           </div>
         </div>
 

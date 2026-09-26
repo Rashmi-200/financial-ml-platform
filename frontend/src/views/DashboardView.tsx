@@ -228,7 +228,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Signal Distribution Card */}
           <div className="glass-panel p-5 rounded-xl space-y-4">
             <h3 className="text-sm font-bold tracking-tight flex items-center justify-between" style={{ color: 'var(--text-primary)' }}>
-              <span>Model Signal Distribution</span>
+              <span>Quantitative AI Signals</span>
               <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>10 Assets</span>
             </h3>
 
@@ -250,7 +250,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="p-3 rounded-lg text-xs space-y-1 font-mono" style={{ background: 'var(--bg-muted)', border: '1px solid var(--border)' }}>
               <div className="flex justify-between">
                 <span style={{ color: 'var(--text-muted)' }}>Ensemble Strategy:</span>
-                <span className="font-bold" style={{ color: 'var(--accent)' }}>50% Transformer / 50% LGBM</span>
+                <span className="font-bold" style={{ color: 'var(--accent)' }}>Optimized AI Ensemble</span>
               </div>
               <div className="flex justify-between">
                 <span style={{ color: 'var(--text-muted)' }}>Risk Filter:</span>

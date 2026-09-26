@@ -1,96 +1,96 @@
 {
-  "last_trained_date": "2026-09-16 08:41:29 UTC",
+  "last_trained_date": "2026-09-26 16:53:18 UTC",
   "next_retraining_date": "2026-10-01 00:00:00 UTC",
-  "last_drift_check_date": "2026-09-16 08:41:29 UTC",
+  "last_drift_check_date": "2026-09-26 16:53:18 UTC",
   "retrain_trigger_reason": "Forced retrain (API) by admin@quantvision.com",
   "drift_triggered": true,
-  "max_psi_score": 7.2797,
-  "max_wasserstein_score": 3.1012,
+  "max_psi_score": 7.3361,
+  "max_wasserstein_score": 3.053,
   "feature_drift_scores": {
     "rsi_14": {
-      "psi": 0.0105,
-      "wasserstein": 0.0835,
+      "psi": 0.0167,
+      "wasserstein": 0.109,
       "drift": true,
-      "baseline_mean": 55.1371,
-      "current_mean": 53.8759
+      "baseline_mean": 55.2064,
+      "current_mean": 53.4842
     },
     "macd_hist": {
-      "psi": 0.8209,
-      "wasserstein": 1.0253,
+      "psi": 0.8549,
+      "wasserstein": 1.0497,
       "drift": true,
-      "baseline_mean": 0.0044,
-      "current_mean": -0.001
+      "baseline_mean": 0.0091,
+      "current_mean": -0.0027
     },
     "bb_width": {
-      "psi": 3.1882,
-      "wasserstein": 1.4871,
+      "psi": 3.2561,
+      "wasserstein": 1.5007,
       "drift": true,
-      "baseline_mean": 14.1693,
-      "current_mean": 40.6023
+      "baseline_mean": 14.3158,
+      "current_mean": 41.2024
     },
     "fft_dominant_freq": {
-      "psi": 0.0965,
-      "wasserstein": 0.0782,
+      "psi": 0.1098,
+      "wasserstein": 0.0844,
       "drift": true,
-      "baseline_mean": 0.271,
-      "current_mean": 0.264
+      "baseline_mean": 0.2707,
+      "current_mean": 0.2637
     },
     "var_95": {
-      "psi": 0.1335,
-      "wasserstein": 0.1281,
+      "psi": 0.1537,
+      "wasserstein": 0.1462,
       "drift": true,
-      "baseline_mean": -0.0265,
-      "current_mean": -0.0278
+      "baseline_mean": -0.0264,
+      "current_mean": -0.028
     },
     "volatility_30d": {
-      "psi": 0.0074,
-      "wasserstein": 0.0363,
+      "psi": 0.0069,
+      "wasserstein": 0.0357,
       "drift": false,
       "baseline_mean": 0.0012,
-      "current_mean": 0.0011
+      "current_mean": 0.001
     },
     "wavelet_approx_energy": {
-      "psi": 7.2797,
-      "wasserstein": 3.1012,
+      "psi": 7.3361,
+      "wasserstein": 3.053,
       "drift": true,
-      "baseline_mean": 1320348.8733,
-      "current_mean": 7424743.5082
+      "baseline_mean": 1353060.0775,
+      "current_mean": 7610252.0575
     },
     "atr_14": {
-      "psi": 4.8185,
-      "wasserstein": 1.6908,
+      "psi": 4.8201,
+      "wasserstein": 1.7205,
       "drift": true,
-      "baseline_mean": 2.8844,
-      "current_mean": 8.1769
+      "baseline_mean": 2.9106,
+      "current_mean": 8.3186
     },
     "sharpe_30d": {
-      "psi": 0.0134,
-      "wasserstein": 0.0953,
+      "psi": 0.0244,
+      "wasserstein": 0.1357,
       "drift": true,
-      "baseline_mean": 1.3326,
-      "current_mean": 1.0679
+      "baseline_mean": 1.3498,
+      "current_mean": 0.9715
     }
   },
   "champion_metrics": {
-    "sharpe_ratio": 1.1712,
-    "directional_accuracy_pct": 50.49,
-    "test_rmse": 0.01979,
+    "sharpe_ratio": 0.8422,
+    "directional_accuracy_pct": 48.67,
+    "test_rmse": 0.01966,
     "model_version": "champion"
   },
   "challenger_metrics": {
-    "sharpe_ratio": 1.0117,
-    "directional_accuracy_pct": 49.75,
-    "test_rmse": 0.01948,
+    "sharpe_ratio": 0.8587,
+    "directional_accuracy_pct": 49.88,
+    "test_rmse": 0.01897,
     "best_params": {
-      "num_leaves": 10,
-      "max_depth": 6,
-      "learning_rate": 0.007464728538338035,
-      "feature_fraction": 0.8660747389054873,
-      "n_estimators": 106
+      "num_leaves": 40,
+      "max_depth": 3,
+      "learning_rate": 0.006702063777636832,
+      "feature_fraction": 0.518422634069865,
+      "n_estimators": 131
     },
     "model_version": "challenger"
   },
-  "last_promotion_outcome": "REJECTED: Sharpe 1.0117 vs 1.1712 (FAIL), DirAcc 49.75% vs 50.49% (FAIL)",
-  "total_retrains": 9,
-  "consecutive_drift_alerts": 9
+  "last_promotion_outcome": "REJECTED: Sharpe 0.8587 vs 0.9222 (FAIL), DirAcc 49.88% vs 53.03% (FAIL)",
+  "total_retrains": 11,
+  "consecutive_drift_alerts": 11
 }
