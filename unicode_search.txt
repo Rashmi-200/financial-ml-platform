@@ -1,0 +1,3 @@
+Found in d:/financial-ml-platform/src\data\fetch_data.py at line 3: Downloads daily OHLCV data (2015-01-01 → present) for a universe of
+Found in d:/financial-ml-platform/src\data\fetch_data.py at line 51: # Reset the DatetimeIndex → regular column
+Found in d:/financial-ml-platform/src\data\fetch_data.py at line 54: # Convert from pandas → Polars

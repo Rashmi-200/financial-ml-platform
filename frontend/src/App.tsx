@@ -8,9 +8,12 @@ import { RiskAnalysisView } from './views/RiskAnalysisView';
 import { PortfolioSimulatorView } from './views/PortfolioSimulatorView';
 import { NewsSentimentView } from './views/NewsSentimentView';
 import { ModelMonitorView } from './views/ModelMonitorView';
+import { AdminConsoleView } from './views/AdminConsoleView';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 import { TabType } from './types';
 
-export function App() {
+function MainLayout() {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [selectedSymbol, setSelectedSymbol] = useState<string>('AAPL');
   const [refreshKey, setRefreshKey] = useState<number>(0);
@@ -89,11 +92,29 @@ export function App() {
 
             {activeTab === 'news' && <NewsSentimentView />}
 
-            {activeTab === 'model_monitor' && <ModelMonitorView />}
+            {activeTab === 'model_monitor' && (
+              <ProtectedRoute requiredRole="admin" onNavigateToDashboard={setActiveTab}>
+                <ModelMonitorView />
+              </ProtectedRoute>
+            )}
+
+            {activeTab === 'admin_console' && (
+              <ProtectedRoute requiredRole="admin" onNavigateToDashboard={setActiveTab}>
+                <AdminConsoleView />
+              </ProtectedRoute>
+            )}
           </div>
         </main>
       </div>
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <AuthProvider>
+      <MainLayout />
+    </AuthProvider>
   );
 }
 

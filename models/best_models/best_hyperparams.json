@@ -1,14 +1,16 @@
 {
   "LightGBM": {
     "params": {
-      "num_leaves": 44,
-      "max_depth": 4,
-      "learning_rate": 0.010115062209838438,
-      "feature_fraction": 0.6587293614572385
+      "num_leaves": 16,
+      "max_depth": 3,
+      "learning_rate": 0.005925900584902847,
+      "feature_fraction": 0.5855630003702172,
+      "n_estimators": 81
     },
-    "test_rmse": 0.019493618931755094,
-    "test_acc_pct": 50.245098039215684,
-    "artifact": "best_lightgbm.pkl"
+    "test_rmse": 0.0189,
+    "test_acc_pct": 53.03,
+    "artifact": "best_lightgbm.pkl",
+    "promoted_date": "2026-09-26 16:46:29 UTC"
   },
   "PyTorch GRU": {
     "params": {

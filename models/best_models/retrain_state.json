@@ -1,0 +1,96 @@
+{
+  "last_trained_date": "2026-09-27 06:00:54 UTC",
+  "next_retraining_date": "2026-10-01 00:00:00 UTC",
+  "last_drift_check_date": "2026-09-27 06:00:54 UTC",
+  "retrain_trigger_reason": "PSI=7.3361 >= 0.25",
+  "drift_triggered": true,
+  "max_psi_score": 7.3361,
+  "max_wasserstein_score": 3.053,
+  "feature_drift_scores": {
+    "rsi_14": {
+      "psi": 0.0167,
+      "wasserstein": 0.109,
+      "drift": true,
+      "baseline_mean": 55.2064,
+      "current_mean": 53.4842
+    },
+    "macd_hist": {
+      "psi": 0.8549,
+      "wasserstein": 1.0497,
+      "drift": true,
+      "baseline_mean": 0.0091,
+      "current_mean": -0.0027
+    },
+    "bb_width": {
+      "psi": 3.2561,
+      "wasserstein": 1.5007,
+      "drift": true,
+      "baseline_mean": 14.3158,
+      "current_mean": 41.2024
+    },
+    "fft_dominant_freq": {
+      "psi": 0.1098,
+      "wasserstein": 0.0844,
+      "drift": true,
+      "baseline_mean": 0.2707,
+      "current_mean": 0.2637
+    },
+    "var_95": {
+      "psi": 0.1537,
+      "wasserstein": 0.1462,
+      "drift": true,
+      "baseline_mean": -0.0264,
+      "current_mean": -0.028
+    },
+    "volatility_30d": {
+      "psi": 0.0069,
+      "wasserstein": 0.0357,
+      "drift": false,
+      "baseline_mean": 0.0012,
+      "current_mean": 0.001
+    },
+    "wavelet_approx_energy": {
+      "psi": 7.3361,
+      "wasserstein": 3.053,
+      "drift": true,
+      "baseline_mean": 1353060.0775,
+      "current_mean": 7610252.0575
+    },
+    "atr_14": {
+      "psi": 4.8201,
+      "wasserstein": 1.7205,
+      "drift": true,
+      "baseline_mean": 2.9106,
+      "current_mean": 8.3186
+    },
+    "sharpe_30d": {
+      "psi": 0.0244,
+      "wasserstein": 0.1357,
+      "drift": true,
+      "baseline_mean": 1.3498,
+      "current_mean": 0.9715
+    }
+  },
+  "champion_metrics": {
+    "sharpe_ratio": 0.9222,
+    "directional_accuracy_pct": 53.03,
+    "test_rmse": 0.0189,
+    "model_version": "champion"
+  },
+  "challenger_metrics": {
+    "sharpe_ratio": 0.7194,
+    "directional_accuracy_pct": 48.18,
+    "test_rmse": 0.02003,
+    "best_params": {
+      "num_leaves": 50,
+      "max_depth": 4,
+      "learning_rate": 0.017998412544698025,
+      "feature_fraction": 0.8423707272410398,
+      "n_estimators": 128
+    },
+    "model_version": "challenger"
+  },
+  "last_promotion_outcome": "REJECTED: Sharpe 0.7194 vs 0.9222 (FAIL), DirAcc 48.18% vs 53.03% (FAIL)",
+  "total_retrains": 22,
+  "consecutive_drift_alerts": 22
+}

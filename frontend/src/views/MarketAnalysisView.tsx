@@ -134,7 +134,6 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
     { id: 'technicals', label: '3. Technical Indicators', icon: BarChart3 },
     { id: 'forecast', label: '4. AI Forecast', icon: Bot },
     { id: 'risk', label: '5. Risk Snapshot', icon: Shield },
-    { id: 'model', label: '6. Model Details', icon: Zap },
   ];
 
   return (
@@ -236,8 +235,8 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
               <Bot className="w-5 h-5" style={{ color: 'var(--accent)' }} />
               <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Quant Decision Engine Explanation</h3>
             </div>
-            <p className="text-sm leading-relaxed font-mono" style={{ color: 'var(--text-secondary)' }}>
-              {analysis?.explanation || 'AI Ensemble forecast indicates position trajectory based on multi-head attention over technical features and risk constraints.'}
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              {analysis?.explanation || 'Our AI models project this asset\'s movement by evaluating historical market patterns and maintaining strict risk controls.'}
             </p>
           </div>
 
@@ -498,41 +497,7 @@ export const MarketAnalysisView: React.FC<MarketAnalysisViewProps> = ({ initialS
         </div>
       )}
 
-      {/* SUB-SECTION 6: MODEL DETAILS */}
-      {activeSubSection === 'model' && (
-        <div className="glass-panel p-6 rounded-2xl space-y-6 font-mono">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Production Model Architecture & Feature Weights</h3>
-            <span className="text-xs font-bold badge-buy">
-              Active in Memory
-            </span>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
-              <div className="font-bold text-base" style={{ color: 'var(--accent)' }}>PyTorch Transformer (Deep Temporal)</div>
-              <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                <div>Layers: <span style={{ color: 'var(--text-primary)' }}>2 TransformerEncoderLayers</span></div>
-                <div>d_model: <span style={{ color: 'var(--text-primary)' }}>32 dimensions</span></div>
-                <div>Multi-Head Attention: <span style={{ color: 'var(--text-primary)' }}>2 Heads</span></div>
-                <div>Sequence Window: <span style={{ color: 'var(--text-primary)' }}>30 trading days (T-29 to T-0)</span></div>
-                <div>Parameters: <span style={{ color: 'var(--text-primary)' }}>186,107 trainable weights</span></div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-muted)', borderColor: 'var(--border)' }}>
-              <div className="font-bold text-base" style={{ color: 'var(--up)' }}>LightGBM Regressor (Tabular Non-linear)</div>
-              <div className="space-y-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                <div>Max Depth: <span style={{ color: 'var(--text-primary)' }}>4 levels</span></div>
-                <div>Num Leaves: <span style={{ color: 'var(--text-primary)' }}>44 leaves</span></div>
-                <div>Learning Rate: <span style={{ color: 'var(--text-primary)' }}>0.0101</span></div>
-                <div>Feature Fraction: <span style={{ color: 'var(--text-primary)' }}>0.658 (Subsampling)</span></div>
-                <div>Engineered Inputs: <span style={{ color: 'var(--text-primary)' }}>27 Technical + Wavelet + FFT features</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
