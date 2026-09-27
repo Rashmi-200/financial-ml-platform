@@ -53,6 +53,8 @@ else:
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.pipeline.model_retrain_dag import run_retrain_pipeline
+
 BEST_MODELS_DIR: Path = PROJECT_ROOT / "models" / "best_models"
 GOLD_DIR: Path = PROJECT_ROOT / "data" / "gold"
 RETRAIN_STATE_PATH: Path = BEST_MODELS_DIR / "retrain_state.json"
@@ -247,7 +249,7 @@ try:
     )
 
     _t_drift = PythonOperator(task_id="run_drift_detection", python_callable=run_drift_detection, dag=model_retrain_dag)
-    _t_retrain = PythonOperator(task_id="run_retrain_pipeline", python_callable=lambda: run_retrain_pipeline(force=False), dag=model_retrain_dag)
+    _t_retrain = PythonOperator(task_id="run_retrain_pipeline", python_callable=run_retrain_pipeline, op_kwargs={"force": False}, dag=model_retrain_dag)
     _t_drift >> _t_retrain
 
 except ImportError:
